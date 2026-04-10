@@ -55,89 +55,84 @@ export function Login() {
   };
 
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
-      style={{
-        backgroundImage: 'url(https://images.unsplash.com/photo-1551857704-ba9b620ad444?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YWolMjBtYWhhbCUyMHN1bnJpc2UlMjBpbmRpYXxlbnwxfHx8fDE3NzE4NzI4MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080)'
-      }}
-    >
-      {/* Overlay with warm Indian colors */}
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-900/80 via-amber-900/75 to-blue-900/70 backdrop-blur-sm"></div>
-
-      {/* Decorative mandala pattern overlay */}
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden w-full">
+      {/* Dynamic Background Image */}
       <div 
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1596568888387-eaa5dea7b8c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW5kYWxhJTIwcGF0dGVybiUyMGluZGlhbnxlbnwxfHx8fDE3NzE4NzI4Mjl8MA&ixlib=rb-4.1.0&q=80&w=1080)',
-          backgroundSize: 'contain',
-          backgroundRepeat: 'repeat'
-        }}
+        className="absolute inset-0 bg-cover bg-center animate-in zoom-in duration-1000"
+        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1551857704-ba9b620ad444?ixlib=rb-4.1.0&q=80&w=1080)' }}
       ></div>
+      
+      {/* Rich Glass Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/80 to-primary/40 backdrop-blur-md"></div>
 
-      {/* Login Card with glassmorphism */}
-      <div className="relative z-10 w-full max-w-md mx-4">
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-orange-200/20">
-          {/* Logo */}
-          <div className="flex flex-col items-center mb-8">
-            <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-3 rounded-xl mb-4 shadow-lg">
-              <Palmtree className="w-8 h-8 text-white" />
+      {/* Login Card */}
+      <div className="relative z-10 w-full max-w-md mx-4 animate-in slide-in-from-bottom-8 duration-700 fade-in pt-4 md:pt-8">
+        <div className="glass-card rounded-[2rem] shadow-[0_0_50px_rgba(0,0,0,0.3)] p-10 border border-white/20 relative overflow-hidden">
+          {/* Decorative ambient light */}
+          <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-primary/30 rounded-full blur-[40px]"></div>
+          <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-32 h-32 bg-secondary/30 rounded-full blur-[40px]"></div>
+
+          {/* Logo element */}
+          <div className="flex flex-col items-center mb-10 relative z-10">
+            <div className="bg-gradient-to-tr from-primary to-secondary p-4 rounded-2xl mb-5 shadow-[0_12px_24px_rgba(56,189,248,0.35)] transform hover:scale-105 transition-transform duration-300">
+              <Palmtree className="w-10 h-10 text-primary-foreground" />
             </div>
-            <h1 className="text-2xl font-semibold bg-gradient-to-r from-orange-600 to-orange-700 bg-clip-text text-transparent">
-              Explore India
+            <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+              Travista India
             </h1>
-            <p className="text-gray-600 mt-2 text-center">
-              {isLogin ? 'Discover Incredible India' : 'Begin Your Indian Journey'}
+            <p className="text-muted-foreground mt-2 font-medium">
+              {isLogin ? 'Welcome back to your journey' : 'Begin your Indian adventure'}
             </p>
           </div>
 
-          {/* Error message */}
+          {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
-              {error}
+            <div className="mb-6 p-4 glass border-l-4 border-destructive text-destructive rounded-xl animate-in fade-in slide-in-from-top-4 relative z-10">
+              <span className="font-medium">{error}</span>
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-foreground ml-1 font-medium">Email Address</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder="traveler@journey.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 border-orange-200 focus:border-orange-500"
+                  className="pl-12 h-14 bg-background/50 border-white/10 focus:border-primary/50 focus:ring-primary/30 rounded-xl transition-all w-full text-foreground"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-foreground ml-1 font-medium">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 border-orange-200 focus:border-orange-500"
+                  className="pl-12 h-14 bg-background/50 border-white/10 focus:border-primary/50 focus:ring-primary/30 rounded-xl transition-all w-full text-foreground"
                   required
                 />
               </div>
             </div>
 
             {isLogin && (
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" className="rounded border-orange-300 text-orange-600 focus:ring-orange-500" />
-                  <span className="text-gray-600">Remember me</span>
+              <div className="flex items-center justify-between text-sm pt-2">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input type="checkbox" className="w-4 h-4 rounded border-white/20 bg-background/50 text-primary focus:ring-primary/50 transition-all" />
+                  <span className="text-muted-foreground group-hover:text-foreground transition-colors">Remember me</span>
                 </label>
-                <a href="#" className="text-orange-600 hover:text-orange-700">
+                <a href="#" className="text-primary hover:text-secondary transition-colors font-medium">
                   Forgot password?
                 </a>
               </div>
@@ -146,39 +141,29 @@ export function Login() {
             <Button 
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-primary to-secondary hover:shadow-[0_14px_30px_rgba(56,189,248,0.35)] text-primary-foreground rounded-xl transition-all hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-wait mt-8"
             >
-              {loading ? 'Processing...' : isLogin ? 'Log In' : 'Sign Up'}
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin"></div>
+                  <span>Processing...</span>
+                </div>
+              ) : (
+                isLogin ? 'Log In' : 'Sign Up'
+              )}
             </Button>
           </form>
 
-          {/* Toggle Login/Signup */}
-          <div className="mt-6 text-center text-sm">
-            <span className="text-gray-600">
-              {isLogin ? "New to Explore India? " : 'Already exploring? '}
+          {/* Toggle */}
+          <div className="mt-8 text-center text-sm relative z-10">
+            <span className="text-muted-foreground">
+              {isLogin ? "New to Travista India? " : 'Already expanding your horizons? '}
             </span>
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-orange-600 hover:text-orange-700 font-medium"
+              className="text-primary hover:text-secondary font-bold transition-colors ml-1"
             >
-              {isLogin ? 'Sign Up' : 'Log In'}
-            </button>
-          </div>
-
-          {/* Divider */}
-          <div className="mt-6 flex items-center gap-4">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-            <span className="text-gray-400 text-sm">or continue with</span>
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-          </div>
-
-          {/* Social Login */}
-          <div className="mt-6 grid grid-cols-2 gap-4">
-            <button className="py-2 px-4 border border-orange-300 rounded-lg hover:bg-orange-50 transition-colors text-sm font-medium">
-              Google
-            </button>
-            <button className="py-2 px-4 border border-orange-300 rounded-lg hover:bg-orange-50 transition-colors text-sm font-medium">
-              Facebook
+              {isLogin ? 'Create an account' : 'Log in here'}
             </button>
           </div>
         </div>

@@ -1,9 +1,12 @@
 import { Link } from 'react-router';
-import { ArrowRight, Calendar, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'motion/react';
 import { trips } from '../data/mockData';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { useRef } from 'react';
+import { fadeInUp, fadeInDown, staggerContainer, staggerItem, popIn } from '../utils/animations';
+import { getPointerTiltHandlers } from '../utils/pointerTilt';
 
 export function Home() {
   const weekendTrips = trips.filter(t => t.category === 'weekend');
@@ -11,64 +14,97 @@ export function Home() {
   const longTrips = trips.filter(t => t.category === 'long');
 
   return (
-    <div className="bg-gradient-to-b from-orange-50/30 to-white">
-      {/* Hero Section - Indian themed */}
-      <section 
-        className="relative h-[600px] bg-cover bg-center flex items-center justify-center"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1551857704-ba9b620ad444?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YWolMjBtYWhhbCUyMHN1bnJpc2UlMjBpbmRpYXxlbnwxfHx8fDE3NzE4NzI4MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080)'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/85 via-amber-900/80 to-blue-900/75"></div>
-        
-        {/* Subtle mandala pattern */}
+    <div className="w-full">
+      {/* Premium Hero Section */}
+      <section className="relative min-h-[78vh] flex items-center justify-center overflow-hidden rounded-3xl mx-4 mt-2 shadow-2xl border border-white/20 group">
         <div 
-          className="absolute inset-0 opacity-10"
+          className="absolute inset-0 bg-cover bg-center transform group-hover:scale-105 transition-transform duration-[20s]"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1596568888387-eaa5dea7b8c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW5kYWxhJTIwcGF0dGVybiUyMGluZGlhbnxlbnwxfHx8fDE3NzE4NzI4Mjl8MA&ixlib=rb-4.1.0&q=80&w=1080)',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat'
+            backgroundImage: 'url(https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=1600&q=80)'
           }}
         ></div>
+        {/* Dynamic Glass Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-background/90 backdrop-blur-[2px]"></div>
 
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">
-            Explore the Beauty of India
-          </h1>
-          <p className="text-xl text-white/95 mb-8 drop-shadow-md">
-            Curated travel plans across the diverse landscapes and rich heritage of Incredible India
-          </p>
-          <a href="#trips">
-            <Button size="lg" className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg">
-              Discover Trips
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-          </a>
+        <motion.div 
+          className="relative z-10 text-center px-4 max-w-5xl mx-auto flex flex-col items-center"
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+        >
+          <motion.h1 
+            className="text-5xl md:text-7xl lg:text-8xl font-black text-foreground mb-6 tracking-tight drop-shadow-2xl"
+            variants={fadeInDown}
+          >
+            Explore <br className="md:hidden" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary bg-[length:200%_auto] animate-[gradientBG_5s_linear_infinite]">
+              Incredible India
+            </span>
+          </motion.h1>
+          <motion.p 
+            className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-2xl leading-relaxed"
+            variants={fadeInUp}
+          >
+            Curated premium travel experiences across the diverse landscapes and rich heritage of Bharat
+          </motion.p>
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4"
+            variants={fadeInUp}
+          >
+            <motion.a 
+              href="#trips"
+              variants={popIn}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6 rounded-full shadow-[0_12px_28px_rgba(56,189,248,0.35)] hover:shadow-[0_16px_34px_rgba(56,189,248,0.45)] transition-all duration-300 hover:-translate-y-1">
+                Begin Journey
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </motion.a>
+            <motion.div
+              variants={popIn}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link to="/places">
+                <Button size="lg" variant="outline" className="glass border-primary/30 hover:bg-primary/10 text-lg px-8 py-6 rounded-full transition-all duration-300">
+                  Explore Places
+                </Button>
+              </Link>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        {/* Decorative elements */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center text-muted-foreground">
+          <span className="text-sm font-medium uppercase tracking-widest mb-2">Scroll</span>
+          <div className="w-0.5 h-12 bg-gradient-to-b from-primary to-transparent rounded-full"></div>
         </div>
       </section>
 
       {/* Trip Categories */}
-      <div id="trips" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div id="trips" className="page-container py-24">
         {/* Weekend Trips */}
         <TripSection
-          icon="🏕"
-          title="Weekend Trips"
-          description="Perfect quick getaways for 2-3 days"
+          icon="⛺"
+          title="Weekend Escapes"
+          description="Perfect premium getaways for 2-3 days"
           trips={weekendTrips}
         />
 
         {/* Short Trips */}
         <TripSection
-          icon="🗺"
-          title="Short Trips"
-          description="Immersive experiences for 4-5 days"
+          icon="🗺️"
+          title="Immersive Journeys"
+          description="Curated experiences for 4-5 days"
           trips={shortTrips}
         />
 
         {/* Long Trips */}
         <TripSection
-          icon="🏔"
-          title="Long Trips"
+          icon="🏔️"
+          title="Grand Expeditions"
           description="Extended adventures for 6-7+ days"
           trips={longTrips}
         />
@@ -98,42 +134,81 @@ function TripSection({ icon, title, description, trips }: TripSectionProps) {
   };
 
   return (
-    <section className="mb-16">
-      <div className="flex items-center gap-3 mb-6">
-        <span className="text-4xl">{icon}</span>
-        <div>
-          <h2 className="text-3xl font-semibold bg-gradient-to-r from-orange-700 to-amber-700 bg-clip-text text-transparent">{title}</h2>
-          <p className="text-gray-600">{description}</p>
-        </div>
-      </div>
+    <motion.section 
+      className="mb-20"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true, margin: "-100px" }}
+    >
+      <motion.div 
+        className="flex items-end gap-6 mb-10"
+        variants={staggerContainer}
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        <motion.div 
+          className="bg-primary/10 p-4 rounded-2xl border border-primary/20 backdrop-blur-md shadow-[0_10px_24px_rgba(56,189,248,0.18)]"
+          variants={popIn}
+          whileHover={{ scale: 1.1, rotate: 5 }}
+        >
+          <span className="text-4xl drop-shadow-lg">{icon}</span>
+        </motion.div>
+        <motion.div variants={staggerItem}>
+          <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-2 tracking-tight">
+            {title}
+          </h2>
+          <p className="text-lg text-muted-foreground">{description}</p>
+        </motion.div>
+      </motion.div>
 
       <div className="relative group">
-        {/* Scroll buttons with orange theme */}
-        <button
+        {/* Scroll buttons with glassmorphism */}
+        <motion.button
           onClick={() => scroll('left')}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-orange-50 -ml-4 border border-orange-200"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 glass-card rounded-full p-4 shadow-[0_8px_18px_rgba(0,0,0,0.12)] opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 hover:bg-primary/20 -ml-6 border border-white/20 hover:border-primary/50"
+          whileHover={{ scale: 1.15 }}
+          whileTap={{ scale: 0.9 }}
         >
-          <ChevronLeft className="w-6 h-6 text-orange-600" />
-        </button>
-        <button
+          <ChevronLeft className="w-6 h-6 text-foreground" />
+        </motion.button>
+        <motion.button
           onClick={() => scroll('right')}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-orange-50 -mr-4 border border-orange-200"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 glass-card rounded-full p-4 shadow-[0_8px_18px_rgba(0,0,0,0.12)] opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 hover:bg-primary/20 -mr-6 border border-white/20 hover:border-primary/50"
+          whileHover={{ scale: 1.15 }}
+          whileTap={{ scale: 0.9 }}
         >
-          <ChevronRight className="w-6 h-6 text-orange-600" />
-        </button>
+          <ChevronRight className="w-6 h-6 text-foreground" />
+        </motion.button>
 
         {/* Trip cards container */}
-        <div
+        <motion.div
           ref={scrollContainerRef}
-          className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory"
+          className="flex gap-8 overflow-x-auto pb-8 pt-4 scrollbar-hide snap-x snap-mandatory"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true, margin: "-100px" }}
         >
-          {trips.map((trip) => (
-            <TripCard key={trip.id} trip={trip} />
+          {trips.map((trip, index) => (
+            <motion.div
+              key={trip.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ 
+                duration: 0.5,
+                delay: index * 0.1
+              }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <TripCard trip={trip} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -142,44 +217,73 @@ interface TripCardProps {
 }
 
 function TripCard({ trip }: TripCardProps) {
+  const tiltHandlers = getPointerTiltHandlers<HTMLDivElement>(8, 1.02);
+
   return (
-    <div className="min-w-[350px] bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden snap-start group border border-orange-100/50">
-      <div className="relative h-64 overflow-hidden">
-        <img
+    <motion.div 
+      className="min-w-[380px] glass-card card-tilt-dynamic card-tilt-gloss rounded-3xl transition-all duration-500 overflow-hidden snap-start group border border-white/10 hover:border-primary/40 relative flex flex-col"
+      {...tiltHandlers}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none"></motion.div>
+      
+      <motion.div className="relative h-72 overflow-hidden m-3 rounded-2xl card-3d-layer">
+        <motion.img
           src={trip.image}
           alt={trip.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          className="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
+          whileHover={{ scale: 1.12, rotate: 1 }}
+          transition={{ duration: 0.5 }}
         />
-        {/* Indian color accent overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-orange-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div className="absolute top-4 right-4">
-          <Badge className="bg-white/95 text-orange-700 hover:bg-white border border-orange-200">
-            <Calendar className="w-3 h-3 mr-1" />
+        {/* Dynamic Glass Overlay */}
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+        ></motion.div>
+        <motion.div 
+          className="absolute top-4 right-4"
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          transition={{ duration: 0.2 }}
+        >
+          <Badge className="glass border-white/20 text-foreground py-1.5 px-3 backdrop-blur-md font-medium shadow-lg hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors">
+            <Calendar className="w-3 h-3 mr-1.5" />
             {trip.duration}
           </Badge>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">{trip.name}</h3>
-        <p className="text-gray-600 mb-4 line-clamp-2">{trip.description}</p>
+      <motion.div 
+        className="p-6 pt-2 flex-grow flex flex-col relative z-10 card-3d-layer"
+        variants={staggerItem}
+      >
+        <motion.h3 
+          className="text-2xl font-bold text-foreground mb-3 tracking-tight group-hover:text-primary transition-colors"
+          whileHover={{ x: 5 }}
+        >
+          {trip.name}
+        </motion.h3>
+        <motion.p className="text-muted-foreground mb-6 line-clamp-2 leading-relaxed flex-grow">{trip.description}</motion.p>
 
-        <Link to={`/trip/${trip.id}`}>
-          <Button variant="outline" className="w-full group/btn border-orange-300 text-orange-700 hover:bg-orange-50 hover:border-orange-400">
-            View Details
-            <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-          </Button>
+        <Link to={`/trip/${trip.id}`} className="mt-auto block card-3d-deep">
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Button variant="outline" className="w-full rounded-xl glass border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 group/btn h-12 text-md font-medium shadow-[0_10px_20px_rgba(15,23,42,0.10)] hover:shadow-[0_14px_30px_rgba(56,189,248,0.25)]">
+              Explore Details
+              <motion.span
+                className="inline-block"
+                initial={{ x: 0 }}
+                whileHover={{ x: 8 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </motion.span>
+            </Button>
+          </motion.div>
         </Link>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
-
-// Add this to hide scrollbar
-const style = document.createElement('style');
-style.textContent = `
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-`;
-document.head.appendChild(style);

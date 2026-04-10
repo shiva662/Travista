@@ -51,7 +51,7 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    const payload = { id: user._id, email: user.email };
+    const payload = { id: user._id, email: user.email, role: user.role };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: '1h'
     });
@@ -64,6 +64,7 @@ const loginUser = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
         savedPlaces: populated.savedPlaces || []
       }
     });

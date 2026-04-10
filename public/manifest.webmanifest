@@ -1,0 +1,17 @@
+{
+  "name": "Travista India",
+  "short_name": "Travista",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#38bdf8",
+  "description": "Discover and plan immersive travel experiences across India.",
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

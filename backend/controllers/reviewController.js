@@ -36,7 +36,7 @@ async function recalcPlaceStats(placeId) {
 const addReview = async (req, res) => {
   try {
     const { placeId } = req.params;
-    const { rating, comment } = req.body;
+    const { rating, comment, imageUrl } = req.body;
     const userId = req.user && req.user.id;
 
     if (!userId) return res.status(401).json({ message: 'Authentication required' });
@@ -50,7 +50,7 @@ const addReview = async (req, res) => {
     const existing = await Review.findOne({ place: placeId, user: userId });
     if (existing) return res.status(400).json({ message: 'You have already reviewed this place' });
 
-    const review = new Review({ rating: r, comment, user: userId, place: placeId });
+    const review = new Review({ rating: r, comment, imageUrl: imageUrl || '', user: userId, place: placeId });
     await review.save();
 
     // populate user's name for response
@@ -74,9 +74,18 @@ const addReview = async (req, res) => {
 const getPlaceReviews = async (req, res) => {
   try {
     const { placeId } = req.params;
+    const { sort = 'newest' } = req.query;
+
+    const sortOptions = {
+      newest: { createdAt: -1 },
+      oldest: { createdAt: 1 },
+      highest: { rating: -1, createdAt: -1 },
+      lowest: { rating: 1, createdAt: -1 }
+    };
+    const sortBy = sortOptions[sort] || sortOptions.newest;
 
     const reviews = await Review.find({ place: placeId })
-      .sort({ createdAt: -1 })
+      .sort(sortBy)
       .populate('user', 'name');
 
     res.json({ success: true, reviews });

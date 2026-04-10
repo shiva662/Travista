@@ -3,6 +3,7 @@
 
 const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
+const adminMiddleware = require('../middleware/adminMiddleware');
 const {
   addPlace,
   getAllPlaces,
@@ -18,7 +19,7 @@ const Place = require('../models/Place');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
-router.get('/seed/dev', async (req, res) => {
+router.get('/seed/dev', authMiddleware, adminMiddleware, async (req, res) => {
   try {
     if (process.env.NODE_ENV === 'production') {
       return res.status(403).json({ message: 'Not allowed in production' });

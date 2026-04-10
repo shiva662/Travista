@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Travista India - Simple AI Trip Planner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 720px;
+      margin: 24px auto;
+      padding: 0 16px;
+      line-height: 1.4;
+      color: #1f2937;
+    }
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+    label {
+      display: block;
+      margin: 10px 0 6px;
+      font-weight: 600;
+    }
+    input, button, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 14px;
+      background: #f97316;
+      border-color: #f97316;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .status {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #6b7280;
+      min-height: 20px;
+    }
+    .error {
+      color: #dc2626;
+    }
+    .result {
+      margin-top: 14px;
+      min-height: 180px;
+      white-space: pre-wrap;
+      background: #f9fafb;
+    }
+  </style>
+</head>
+<body>
+  <h1>Travista India - AI Trip Planner</h1>
+
+  <div class="card">
+    <label for="destination">Destination</label>
+    <input id="destination" placeholder="e.g., Jaipur" />
+
+    <label for="days">Number of days</label>
+    <input id="days" type="number" min="1" max="14" value="3" />
+
+    <button id="generateBtn">Generate Plan</button>
+
+    <div id="status" class="status"></div>
+
+    <label for="result">Generated Itinerary</label>
+    <textarea id="result" class="result" readonly placeholder="Your plan will appear here..."></textarea>
+  </div>
+
+  <script>
+    const destinationEl = document.getElementById('destination');
+    const daysEl = document.getElementById('days');
+    const generateBtn = document.getElementById('generateBtn');
+    const statusEl = document.getElementById('status');
+    const resultEl = document.getElementById('result');
+
+    async function generatePlan() {
+      const destination = destinationEl.value.trim();
+      const days = Number(daysEl.value);
+
+      if (!destination) {
+        statusEl.textContent = 'Please enter a destination.';
+        statusEl.className = 'status error';
+        return;
+      }
+
+      generateBtn.disabled = true;
+      statusEl.textContent = 'Generating plan...';
+      statusEl.className = 'status';
+      resultEl.value = '';
+
+      try {
+        const response = await fetch('/api/ai/plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ destination, days })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'Request failed');
+        }
+
+        resultEl.value = data.plan;
+        statusEl.textContent = 'Plan generated successfully.';
+        statusEl.className = 'status';
+
+        // Smoothly move to the result box
+        resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (error) {
+        statusEl.textContent = error.message || 'Something went wrong.';
+        statusEl.className = 'status error';
+      } finally {
+        generateBtn.disabled = false;
+      }
+    }
+
+    generateBtn.addEventListener('click', generatePlan);
+  </script>
+</body>
+</html>

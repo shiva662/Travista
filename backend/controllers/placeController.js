@@ -52,9 +52,10 @@ const getAllPlaces = async (req, res) => {
     const filter = {};
     if (state) filter.state = state;
     if (search) {
+      const trimmedSearch = search.trim();
       filter.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { city: { $regex: search, $options: 'i' } }
+        { title: { $regex: trimmedSearch, $options: 'i' } },
+        { city: { $regex: trimmedSearch, $options: 'i' } }
       ];
     }
 

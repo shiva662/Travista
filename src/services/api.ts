@@ -130,3 +130,62 @@ export const placesAPI = {
     }
   }
 };
+
+// Reviews API calls
+export const reviewsAPI = {
+  getPlaceReviews: async (placeId: string, sort: 'newest' | 'oldest' | 'highest' | 'lowest' = 'newest') => {
+    const res = await fetch(`${API_BASE_URL}/reviews/${placeId}?sort=${sort}`);
+    return res.json();
+  },
+
+  addReview: async (placeId: string, rating: number, comment: string, imageUrl?: string) => {
+    const res = await fetch(`${API_BASE_URL}/reviews/${placeId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
+      body: JSON.stringify({ rating, comment, imageUrl: imageUrl || '' })
+    });
+    return res.json();
+  },
+
+  deleteReview: async (reviewId: string) => {
+    const res = await fetch(`${API_BASE_URL}/reviews/${reviewId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`
+      }
+    });
+    return res.json();
+  }
+};
+
+// AI Planner API calls
+export const aiAPI = {
+  generatePlan: async (payload: {
+    destination: string;
+    days: number;
+    budget: 'low' | 'medium' | 'high';
+    travelType: 'adventure' | 'cultural' | 'relaxation' | 'mixed';
+    regenerate?: boolean;
+  }) => {
+    const res = await fetch(`${API_BASE_URL}/ai/plan-trip`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      const err = new Error(data?.message || 'Failed to generate AI plan') as Error & { status?: number };
+      err.status = res.status;
+      throw err;
+    }
+
+    return data;
+  }
+};

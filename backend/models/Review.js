@@ -15,6 +15,10 @@ const reviewSchema = new mongoose.Schema({
     required: [true, 'Comment is required'],
     trim: true
   },
+  imageUrl: {
+    type: String,
+    default: ''
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
