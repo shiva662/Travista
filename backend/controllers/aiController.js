@@ -128,14 +128,17 @@ async function callAiModel({ destination, days, budget, travelType, places }) {
     state: p.state
   }));
 
+  const placeInstruction = knownPlaces.length
+    ? `Use ONLY these places:\n${knownPlaces.map((p) => `${p.title} (${p.city})`).join(', ')}`
+    : `Database places are currently unavailable. Use realistic, popular attractions in and around ${destination}.`;
+
   const prompt = `
 Create a ${days}-day travel itinerary for ${destination} in India.
 
 Travel type: ${travelType}
 Budget: ${budget}
 
-Use ONLY these places:
-${knownPlaces.map(p => `${p.title} (${p.city})`).join(", ")}
+${placeInstruction}
 
 Return ONLY JSON in this format:
 {
@@ -234,6 +237,7 @@ const generateTripPlan = async (req, res) => {
 
     let places = await fetchRelevantPlaces(destination, days);
     let usedFallbackPlaces = false;
+    let generatedWithoutDbPlaces = false;
 
     // If destination-specific matches are missing, fall back to top known places
     // so the planner still returns a useful result instead of a blank experience.
@@ -247,19 +251,19 @@ const generateTripPlan = async (req, res) => {
     }
 
     if (!places.length) {
-      return res.status(404).json({
-        message: 'No places found in database yet. Add places first, then generate a plan.'
-      });
+      generatedWithoutDbPlaces = true;
     }
 
     const aiRaw = await callAiModel({ destination, days, budget, travelType, places });
     const plan = sanitizePlan(aiRaw, days, destination);
 
-    const matchedPlaces = places.map((p) => ({
-      title: p.title,
-      city: p.city,
-      state: p.state
-    }));
+    const matchedPlaces = generatedWithoutDbPlaces
+      ? []
+      : places.map((p) => ({
+          title: p.title,
+          city: p.city,
+          state: p.state
+        }));
 
     writeCache(key, {
       matchedPlaces,
@@ -270,7 +274,9 @@ const generateTripPlan = async (req, res) => {
       success: true,
       source: 'ai',
       matchedPlaces,
-      note: usedFallbackPlaces
+      note: generatedWithoutDbPlaces
+        ? 'No places found in database. Generated itinerary using general destination knowledge.'
+        : usedFallbackPlaces
         ? 'No exact city match found. Generated itinerary using top available places from database.'
         : undefined,
       plan

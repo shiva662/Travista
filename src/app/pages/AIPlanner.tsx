@@ -173,6 +173,7 @@ export function AIPlanner() {
             <Label htmlFor="days">Days</Label>
             <select
               id="days"
+              title="Select number of days"
               value={days}
               onChange={(e) => setDays(Number(e.target.value))}
               className="w-full h-12 rounded-xl border border-border bg-background/50 px-3"
@@ -190,6 +191,7 @@ export function AIPlanner() {
             </Label>
             <select
               id="budget"
+              title="Select budget level"
               value={budget}
               onChange={(e) => setBudget(e.target.value as Budget)}
               className="w-full h-12 rounded-xl border border-border bg-background/50 px-3"
@@ -207,6 +209,7 @@ export function AIPlanner() {
             </Label>
             <select
               id="travelType"
+              title="Select travel type"
               value={travelType}
               onChange={(e) => setTravelType(e.target.value as TravelType)}
               className="w-full h-12 rounded-xl border border-border bg-background/50 px-3"
