@@ -5,6 +5,16 @@ const Place = require('../models/Place');
 
 const planCache = new Map();
 const CACHE_TTL_MS = 10 * 60 * 1000;
+const DEFAULT_PLACES = [
+  { title: 'Hawa Mahal', city: 'Jaipur', state: 'Rajasthan' },
+  { title: 'Amber Fort', city: 'Jaipur', state: 'Rajasthan' },
+  { title: 'Taj Mahal', city: 'Agra', state: 'Uttar Pradesh' },
+  { title: 'Gateway of India', city: 'Mumbai', state: 'Maharashtra' },
+  { title: 'Marine Drive', city: 'Mumbai', state: 'Maharashtra' },
+  { title: 'Mysore Palace', city: 'Mysuru', state: 'Karnataka' },
+  { title: 'Meenakshi Temple', city: 'Madurai', state: 'Tamil Nadu' },
+  { title: 'Dal Lake', city: 'Srinagar', state: 'Jammu and Kashmir' }
+];
 
 function normalize(value) {
   return String(value || '').trim();
@@ -247,9 +257,8 @@ const generateTripPlan = async (req, res) => {
     }
 
     if (!places.length) {
-      return res.status(404).json({
-        message: 'No places found in database yet. Add places first, then generate a plan.'
-      });
+      places = DEFAULT_PLACES;
+      usedFallbackPlaces = true;
     }
 
     const aiRaw = await callAiModel({ destination, days, budget, travelType, places });
@@ -271,7 +280,7 @@ const generateTripPlan = async (req, res) => {
       source: 'ai',
       matchedPlaces,
       note: usedFallbackPlaces
-        ? 'No exact city match found. Generated itinerary using top available places from database.'
+        ? 'No exact city match found or database is empty. Generated itinerary using fallback places.'
         : undefined,
       plan
     });
