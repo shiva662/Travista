@@ -138,17 +138,14 @@ async function callAiModel({ destination, days, budget, travelType, places }) {
     state: p.state
   }));
 
-  const placeInstruction = knownPlaces.length
-    ? `Use ONLY these places:\n${knownPlaces.map((p) => `${p.title} (${p.city})`).join(', ')}`
-    : `Database places are currently unavailable. Use realistic, popular attractions in and around ${destination}.`;
-
   const prompt = `
 Create a ${days}-day travel itinerary for ${destination} in India.
 
 Travel type: ${travelType}
 Budget: ${budget}
 
-${placeInstruction}
+Use ONLY these places:
+${knownPlaces.map(p => `${p.title} (${p.city})`).join(", ")}
 
 Return ONLY JSON in this format:
 {
@@ -247,7 +244,6 @@ const generateTripPlan = async (req, res) => {
 
     let places = await fetchRelevantPlaces(destination, days);
     let usedFallbackPlaces = false;
-    let generatedWithoutDbPlaces = false;
 
     // If destination-specific matches are missing, fall back to top known places
     // so the planner still returns a useful result instead of a blank experience.
@@ -268,13 +264,11 @@ const generateTripPlan = async (req, res) => {
     const aiRaw = await callAiModel({ destination, days, budget, travelType, places });
     const plan = sanitizePlan(aiRaw, days, destination);
 
-    const matchedPlaces = generatedWithoutDbPlaces
-      ? []
-      : places.map((p) => ({
-          title: p.title,
-          city: p.city,
-          state: p.state
-        }));
+    const matchedPlaces = places.map((p) => ({
+      title: p.title,
+      city: p.city,
+      state: p.state
+    }));
 
     writeCache(key, {
       matchedPlaces,
@@ -286,7 +280,7 @@ const generateTripPlan = async (req, res) => {
       source: 'ai',
       matchedPlaces,
       note: usedFallbackPlaces
-        ? 'No exact city match found. Generated itinerary using top available places from database.'
+        ? 'No exact city match found or database is empty. Generated itinerary using fallback places.'
         : undefined,
       plan
     });
