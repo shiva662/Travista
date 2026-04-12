@@ -17,11 +17,8 @@ export function Home() {
     <div className="w-full">
       {/* Premium Hero Section */}
       <section className="relative min-h-[78vh] flex items-center justify-center overflow-hidden rounded-3xl mx-4 mt-2 shadow-2xl border border-white/20 group">
-        <div 
-          className="absolute inset-0 bg-cover bg-center transform group-hover:scale-105 transition-transform duration-[20s]"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=1600&q=80)'
-          }}
+        <div
+          className="absolute inset-0 home-hero-bg bg-cover bg-center transform group-hover:scale-105 transition-transform duration-[20s]"
         ></div>
         {/* Dynamic Glass Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-background/90 backdrop-blur-[2px]"></div>
@@ -74,13 +71,16 @@ export function Home() {
               </Link>
             </motion.div>
           </motion.div>
+
+          <motion.div
+            className="mt-8 flex flex-col items-center text-muted-foreground animate-bounce"
+            variants={fadeInUp}
+          >
+            <span className="text-sm font-medium uppercase tracking-widest mb-2">Scroll</span>
+            <div className="w-0.5 h-12 bg-gradient-to-b from-primary to-transparent rounded-full"></div>
+          </motion.div>
         </motion.div>
 
-        {/* Decorative elements */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center text-muted-foreground">
-          <span className="text-sm font-medium uppercase tracking-widest mb-2">Scroll</span>
-          <div className="w-0.5 h-12 bg-gradient-to-b from-primary to-transparent rounded-full"></div>
-        </div>
       </section>
 
       {/* Trip Categories */}
@@ -186,7 +186,6 @@ function TripSection({ icon, title, description, trips }: TripSectionProps) {
         <motion.div
           ref={scrollContainerRef}
           className="flex gap-8 overflow-x-auto pb-8 pt-4 scrollbar-hide snap-x snap-mandatory"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -225,8 +224,6 @@ function TripCard({ trip }: TripCardProps) {
       {...tiltHandlers}
       transition={{ duration: 0.3 }}
     >
-      <motion.div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none"></motion.div>
-      
       <motion.div className="relative h-72 overflow-hidden m-3 rounded-2xl card-3d-layer">
         <motion.img
           src={trip.image}
@@ -258,7 +255,7 @@ function TripCard({ trip }: TripCardProps) {
         variants={staggerItem}
       >
         <motion.h3 
-          className="text-2xl font-bold text-foreground mb-3 tracking-tight group-hover:text-primary transition-colors"
+          className="text-2xl font-bold text-foreground mb-3 tracking-tight"
           whileHover={{ x: 5 }}
         >
           {trip.name}

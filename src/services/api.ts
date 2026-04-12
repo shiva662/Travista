@@ -24,6 +24,15 @@ export const authAPI = {
       body: JSON.stringify({ email, password })
     });
     return res.json();
+  },
+
+  resetPassword: async (email: string, newPassword: string) => {
+    const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, newPassword })
+    });
+    return res.json();
   }
 };
 

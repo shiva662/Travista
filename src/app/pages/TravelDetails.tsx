@@ -49,6 +49,8 @@ export function TripDetails() {
         {/* Back button */}
         <button
           onClick={() => navigate(-1)}
+          aria-label="Go back"
+          title="Go back"
           className="absolute top-8 left-8 glass hover:bg-white/20 rounded-full p-4 shadow-lg transition-all border border-white/30 backdrop-blur-md group/btn"
         >
           <ArrowLeft className="w-6 h-6 text-white group-hover/btn:-translate-x-1 transition-transform" />
@@ -58,11 +60,11 @@ export function TripDetails() {
         <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 text-foreground">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="max-w-3xl">
-              <Badge className="glass bg-primary/20 text-primary border-primary/30 mb-6 px-4 py-1.5 backdrop-blur-md text-sm font-bold tracking-wider rounded-full shadow-[0_10px_20px_rgba(56,189,248,0.25)]">
+              <Badge className="glass bg-primary/20 text-black border-primary/30 mb-6 px-4 py-1.5 backdrop-blur-md text-sm font-bold tracking-wider rounded-full shadow-[0_10px_20px_rgba(56,189,248,0.25)]">
                 <Calendar className="w-4 h-4 mr-2" />
                 {trip.duration}
               </Badge>
-              <h1 className="text-5xl md:text-7xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary drop-shadow-[0_10px_20px_rgba(56,189,248,0.20)]">
+              <h1 className="text-5xl md:text-7xl font-black mb-4 text-black">
                 {trip.name}
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">

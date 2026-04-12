@@ -2,7 +2,6 @@ import { Link, useLocation } from 'react-router';
 import { Palmtree, Menu, X, User, LogOut, Moon, Sun } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { toast } from 'sonner';
 
 export function Navigation() {
   const location = useLocation();
@@ -53,7 +52,6 @@ export function Navigation() {
     root.classList.toggle('dark', next);
     localStorage.setItem('theme', next ? 'dark' : 'light');
     setIsDarkMode(next);
-    toast.success(next ? 'Night mode enabled' : 'Light mode enabled');
   };
 
   const navLinks = [

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { placesAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { MapPin, User } from 'lucide-react';
@@ -21,10 +21,21 @@ interface Place {
 
 export function SavedPlaces() {
   const navigate = useNavigate();
-  const { isLoggedIn, user, token, setSaved } = useAuth();
+  const { isLoggedIn, user, token, setSaved, logout } = useAuth();
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const cardDelayClasses = ['delay-0', 'delay-75', 'delay-100', 'delay-150', 'delay-200', 'delay-300'];
+
+  const handleAuthExpiry = () => {
+    logout();
+    navigate('/login', { replace: true });
+  };
+
+  const isAuthErrorMessage = (message?: string) => {
+    const text = String(message || '').toLowerCase();
+    return text.includes('invalid or expired token') || text.includes('authentication required') || text.includes('no token provided');
+  };
 
   useEffect(() => {
     if (isLoggedIn) fetchSaved();
@@ -42,6 +53,11 @@ export function SavedPlaces() {
       const contentType = res.headers.get('content-type') || '';
 
       if (!res.ok) {
+        if (res.status === 401 || res.status === 403) {
+          handleAuthExpiry();
+          return;
+        }
+
         if (contentType.includes('application/json')) {
           const body = await res.json();
           setError(body.message || 'Failed to load saved places');
@@ -72,13 +88,16 @@ export function SavedPlaces() {
 
   const handleToggle = async (placeId: string, saved: boolean) => {
     if (!token) return;
-    if (saved) {
-      await placesAPI.unsavePlace(placeId);
-      setSaved(placeId, false);
-    } else {
-      await placesAPI.savePlace(placeId);
-      setSaved(placeId, true);
+    const response = saved
+      ? await placesAPI.unsavePlace(placeId)
+      : await placesAPI.savePlace(placeId);
+
+    if (isAuthErrorMessage(response?.message)) {
+      handleAuthExpiry();
+      return;
     }
+
+    setSaved(placeId, !saved);
     fetchSaved();
   };
 
@@ -135,58 +154,46 @@ export function SavedPlaces() {
           return (
             <div 
               key={place._id} 
-              className="glass-card rounded-3xl overflow-hidden group border border-white/10 hover:border-primary/40 hover:-translate-y-2 transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 flex flex-col cursor-pointer"
-              style={{ animationDelay: `${index * 100}ms` }}
-              role="button"
-              tabIndex={0}
-              onClick={() => navigate(`/places/${place._id}`)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  navigate(`/places/${place._id}`);
-                }
-              }}
-              aria-label={`Open details for ${place.title}`}
+              className={`glass-card rounded-3xl overflow-hidden group border border-white/10 hover:border-primary/40 hover:-translate-y-2 transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 flex flex-col relative ${cardDelayClasses[index % cardDelayClasses.length]}`}
             >
-              <div className="h-48 relative overflow-hidden bg-background">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-primary/10 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-700">
-                  {place.imageUrl ? (
-                    <img src={place.imageUrl} alt={place.title} className="w-full h-full object-cover" />
-                  ) : (
-                    '📍'
-                  )}
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent"></div>
-                
-                <button
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleToggle(place._id, !!isSaved);
-                  }}
-                  className="absolute top-4 right-4 z-10 p-3 rounded-full glass border border-white/20 hover:scale-110 shadow-lg transition-all duration-300"
-                  title={isSaved ? 'Unsave' : 'Save'}
-                >
-                  <HeartIcon filled={!!isSaved} />
-                </button>
-              </div>
+              <button
+                onClick={() => handleToggle(place._id, !!isSaved)}
+                className="absolute top-4 right-4 z-20 p-3 rounded-full glass border border-white/20 hover:scale-110 shadow-lg transition-all duration-300"
+                title={isSaved ? 'Unsave' : 'Save'}
+              >
+                <HeartIcon filled={!!isSaved} />
+              </button>
 
-              <div className="p-6 flex-grow flex flex-col">
-                <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors tracking-tight">{place.title}</h3>
-                
-                <div className="flex items-center gap-2 text-muted-foreground text-sm mb-4 bg-muted/30 w-fit px-3 py-1.5 rounded-lg border border-border">
-                  <MapPin className="w-4 h-4 text-primary" />
-                  <span className="font-medium">{place.city}, {place.state}</span>
-                </div>
-                
-                <p className="text-muted-foreground text-sm mb-6 line-clamp-3 leading-relaxed flex-grow">{place.description}</p>
-                
-                <div className="pt-4 border-t border-border flex items-center gap-2 text-muted-foreground text-xs font-medium mt-auto">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white">
-                    <User className="w-3 h-3" />
+              <Link to={`/places/${place._id}`} aria-label={`Open details for ${place.title}`} className="flex flex-col flex-grow">
+                <div className="h-48 relative overflow-hidden bg-background">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-primary/10 flex items-center justify-center text-5xl group-hover:scale-110 transition-transform duration-700">
+                    {place.imageUrl ? (
+                      <img src={place.imageUrl} alt={place.title} className="w-full h-full object-cover" />
+                    ) : (
+                      '📍'
+                    )}
                   </div>
-                  Added by {place.createdBy.name.split(' ')[0]}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent"></div>
                 </div>
-              </div>
+
+                <div className="p-6 flex-grow flex flex-col">
+                  <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors tracking-tight">{place.title}</h3>
+                  
+                  <div className="flex items-center gap-2 text-muted-foreground text-sm mb-4 bg-muted/30 w-fit px-3 py-1.5 rounded-lg border border-border">
+                    <MapPin className="w-4 h-4 text-primary" />
+                    <span className="font-medium">{place.city}, {place.state}</span>
+                  </div>
+                  
+                  <p className="text-muted-foreground text-sm mb-6 line-clamp-3 leading-relaxed flex-grow">{place.description}</p>
+                  
+                  <div className="pt-4 border-t border-border flex items-center gap-2 text-muted-foreground text-xs font-medium mt-auto">
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white">
+                      <User className="w-3 h-3" />
+                    </div>
+                    Added by {place.createdBy.name.split(' ')[0]}
+                  </div>
+                </div>
+              </Link>
             </div>
           );
         })}

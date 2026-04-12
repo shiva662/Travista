@@ -8,6 +8,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
 export function MyTrips() {
   const savedTrips = trips.filter(t => t.saved);
   const completedTrips = trips.filter(t => t.completed);
+  const cardDelayClasses = [
+    'my-trips-delay-0',
+    'my-trips-delay-100',
+    'my-trips-delay-200',
+    'my-trips-delay-300',
+    'my-trips-delay-400',
+    'my-trips-delay-500'
+  ];
 
   return (
     <div className="page-container min-h-screen py-16">
@@ -23,17 +31,17 @@ export function MyTrips() {
       <div className="max-w-7xl mx-auto">
         {/* Tabs with Glassmorphic theme */}
         <Tabs defaultValue="saved" className="w-full">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12 glass p-1.5 rounded-2xl border border-white/10">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12 glass h-auto p-1.5 rounded-2xl border border-white/10">
             <TabsTrigger 
               value="saved" 
-              className="flex items-center gap-2 rounded-xl py-3 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all"
+              className="flex min-w-0 h-auto min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm leading-tight data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all"
             >
               <Bookmark className="w-4 h-4" />
               Saved Trips ({savedTrips.length})
             </TabsTrigger>
             <TabsTrigger 
               value="completed" 
-              className="flex items-center gap-2 rounded-xl py-3 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all"
+              className="flex min-w-0 h-auto min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm leading-tight data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all"
             >
               <CheckCircle2 className="w-4 h-4" />
               Completed ({completedTrips.length})
@@ -44,7 +52,7 @@ export function MyTrips() {
             {savedTrips.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {savedTrips.map((trip, index) => (
-                  <div key={trip.id} className="animate-in fade-in slide-in-from-bottom-8" style={{ animationDelay: `${index * 100}ms` }}>
+                  <div key={trip.id} className={`animate-in fade-in slide-in-from-bottom-8 ${cardDelayClasses[index % cardDelayClasses.length]}`}>
                     <TripCard trip={trip} status="saved" />
                   </div>
                 ))}
@@ -64,7 +72,7 @@ export function MyTrips() {
             {completedTrips.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {completedTrips.map((trip, index) => (
-                  <div key={trip.id} className="animate-in fade-in slide-in-from-bottom-8" style={{ animationDelay: `${index * 100}ms` }}>
+                  <div key={trip.id} className={`animate-in fade-in slide-in-from-bottom-8 ${cardDelayClasses[index % cardDelayClasses.length]}`}>
                     <TripCard trip={trip} status="completed" />
                   </div>
                 ))}

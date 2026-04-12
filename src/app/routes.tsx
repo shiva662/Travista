@@ -9,6 +9,10 @@ import { Places } from './pages/Places';
 import { PlaceDetails } from './pages/PlaceDetails';
 import { SavedPlaces } from './pages/SavedPlaces';
 import { AIPlanner } from './pages/AIPlanner';
+import { FAQ } from './pages/FAQ';
+import { AboutUs } from './pages/AboutUs';
+import { PrivacyPolicy } from './pages/PrivacyPolicy';
+import { TermsOfService } from './pages/TermsOfService';
 import { AdminLayout } from './pages/Admin/AdminLayout';
 import { AdminDashboard } from './pages/Admin/AdminDashboard';
 import { AdminUsers } from './pages/Admin/AdminUsers';
@@ -85,6 +89,22 @@ export const router = createBrowserRouter([
       {
         path: 'ai-planner',
         Component: AIPlanner,
+      },
+      {
+        path: 'faq',
+        Component: FAQ,
+      },
+      {
+        path: 'about',
+        Component: AboutUs,
+      },
+      {
+        path: 'privacy-policy',
+        Component: PrivacyPolicy,
+      },
+      {
+        path: 'terms-of-service',
+        Component: TermsOfService,
       },
     ],
   },

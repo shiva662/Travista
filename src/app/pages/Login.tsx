@@ -14,26 +14,58 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const handleForgotPassword = async () => {
+    setError('');
+    setInfo('');
+
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
+      setError('Enter your email first, then click Forgot password.');
+      return;
+    }
+
+    const newPassword = window.prompt('Enter a new password (min 6 characters):');
+    if (newPassword === null) {
+      return;
+    }
+
+    try {
+      const response = await authAPI.resetPassword(normalizedEmail, newPassword);
+      if (response.message && !response.error) {
+        setInfo(response.message);
+      } else {
+        setError(response.message || 'Failed to reset password');
+      }
+    } catch (err) {
+      setError('Connection error. Is the backend running?');
+      console.error(err);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setInfo('');
     setLoading(true);
 
     try {
       let response;
+      const normalizedEmail = email.trim().toLowerCase();
       
       if (isLogin) {
-        response = await authAPI.login(email, password);
+        response = await authAPI.login(normalizedEmail, password);
       } else {
         response = await authAPI.register(
-          email.split('@')[0], // use email prefix as name for signup
-          email,
+          normalizedEmail.split('@')[0], // use email prefix as name for signup
+          normalizedEmail,
           password
         );
         if (response.message && !response.user) {
           setError('Registered! Please log in.');
+          setInfo('');
           setIsLogin(true);
           setLoading(false);
           return;
@@ -57,9 +89,8 @@ export function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden w-full">
       {/* Dynamic Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center animate-in zoom-in duration-1000"
-        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1551857704-ba9b620ad444?ixlib=rb-4.1.0&q=80&w=1080)' }}
+      <div
+        className="absolute inset-0 login-hero-bg bg-cover bg-center animate-in zoom-in duration-1000"
       ></div>
       
       {/* Rich Glass Overlay */}
@@ -91,6 +122,12 @@ export function Login() {
               <span className="font-medium">{error}</span>
             </div>
           )}
+
+            {info && (
+              <div className="mb-6 p-4 glass border-l-4 border-emerald-500 text-emerald-400 rounded-xl animate-in fade-in slide-in-from-top-4 relative z-10">
+                <span className="font-medium">{info}</span>
+              </div>
+            )}
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
@@ -132,9 +169,13 @@ export function Login() {
                   <input type="checkbox" className="w-4 h-4 rounded border-white/20 bg-background/50 text-primary focus:ring-primary/50 transition-all" />
                   <span className="text-muted-foreground group-hover:text-foreground transition-colors">Remember me</span>
                 </label>
-                <a href="#" className="text-primary hover:text-secondary transition-colors font-medium">
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-primary hover:text-secondary transition-colors font-medium"
+                >
                   Forgot password?
-                </a>
+                </button>
               </div>
             )}
 
