@@ -1,21 +1,140 @@
-import { Link } from 'react-router';
-import { Calendar, ArrowRight, Bookmark, CheckCircle2 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { Calendar, ArrowRight, Bookmark, CheckCircle2, Loader2, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { trips } from '../data/mockData';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { savedTripsAPI } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
+
+interface SavedTripRecord {
+  tripId: string;
+  timestamp: string;
+}
 
 export function MyTrips() {
-  const savedTrips = trips.filter(t => t.saved);
-  const completedTrips = trips.filter(t => t.completed);
+  const navigate = useNavigate();
+  const { isLoggedIn, logout } = useAuth();
+
+  const [savedTripIds, setSavedTripIds] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [removingTripId, setRemovingTripId] = useState<string | null>(null);
+
   const cardDelayClasses = [
     'my-trips-delay-0',
     'my-trips-delay-100',
     'my-trips-delay-200',
     'my-trips-delay-300',
     'my-trips-delay-400',
-    'my-trips-delay-500'
+    'my-trips-delay-500',
   ];
+
+  const savedTrips = useMemo(() => {
+    return trips.filter((trip) => savedTripIds.includes(trip.id));
+  }, [savedTripIds]);
+
+  const completedTrips = useMemo(() => {
+    return savedTrips.filter((trip) => Boolean(trip.completed));
+  }, [savedTrips]);
+
+  const isAuthFailure = (message?: string) => {
+    const text = String(message || '').toLowerCase();
+    return (
+      text.includes('invalid or expired token') ||
+      text.includes('no token provided') ||
+      text.includes('authentication required')
+    );
+  };
+
+  const handleAuthFailure = (message?: string) => {
+    if (!isAuthFailure(message)) return false;
+    toast.error('Session expired. Please log in again.');
+    logout();
+    navigate('/login', { replace: true });
+    return true;
+  };
+
+  const fetchSavedTrips = async () => {
+    if (!isLoggedIn) return;
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await savedTripsAPI.getMySavedTrips();
+      if (handleAuthFailure(response?.message)) return;
+
+      if (response.success) {
+        const ids = Array.isArray(response.savedTrips)
+          ? (response.savedTrips as SavedTripRecord[]).map((item) => String(item.tripId))
+          : [];
+        setSavedTripIds(ids);
+        return;
+      }
+
+      setError(response.message || 'Failed to load My Trips');
+    } catch (_) {
+      setError('Unable to load trips right now. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setSavedTripIds([]);
+      return;
+    }
+
+    void fetchSavedTrips();
+  }, [isLoggedIn]);
+
+  const handleRemoveTrip = async (tripId: string) => {
+    if (removingTripId) return;
+
+    const previousIds = [...savedTripIds];
+    setRemovingTripId(tripId);
+    setSavedTripIds((current) => current.filter((id) => id !== tripId));
+
+    try {
+      const response = await savedTripsAPI.deleteTrip(tripId);
+      if (handleAuthFailure(response?.message)) return;
+
+      if (response.success || response.status === 404) {
+        toast.success(response.status === 404 ? 'Trip already removed.' : 'Trip removed from My Trips.');
+        return;
+      }
+
+      setSavedTripIds(previousIds);
+      setError(response.message || 'Failed to remove trip');
+      toast.error(response.message || 'Failed to remove trip');
+    } catch (_) {
+      setSavedTripIds(previousIds);
+      setError('Network error while removing trip');
+      toast.error('Network error while removing trip');
+    } finally {
+      setRemovingTripId(null);
+    }
+  };
+
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen py-16 px-4 flex items-center justify-center">
+        <div className="glass-card rounded-3xl p-10 border border-white/10 text-center max-w-xl w-full">
+          <h2 className="text-3xl font-bold text-foreground mb-4">Please log in to view My Trips</h2>
+          <p className="text-muted-foreground mb-8">Your saved journeys are available after login.</p>
+          <Link to="/login">
+            <Button className="bg-gradient-to-r from-primary to-secondary text-primary-foreground h-12 px-8 rounded-xl">
+              Go to Login
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-container min-h-screen py-16">
@@ -28,67 +147,91 @@ export function MyTrips() {
         </p>
       </div>
 
-      <div className="max-w-7xl mx-auto">
-        {/* Tabs with Glassmorphic theme */}
-        <Tabs defaultValue="saved" className="w-full">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12 glass h-auto p-1.5 rounded-2xl border border-white/10">
-            <TabsTrigger 
-              value="saved" 
-              className="flex min-w-0 h-auto min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm leading-tight data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all"
-            >
-              <Bookmark className="w-4 h-4" />
-              Saved Trips ({savedTrips.length})
-            </TabsTrigger>
-            <TabsTrigger 
-              value="completed" 
-              className="flex min-w-0 h-auto min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm leading-tight data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              Completed ({completedTrips.length})
-            </TabsTrigger>
-          </TabsList>
+      {error && (
+        <div className="mb-8 p-4 glass border-l-4 border-destructive text-destructive rounded-xl shadow-lg max-w-7xl mx-auto animate-in fade-in slide-in-from-top-4">
+          <p className="font-medium">{error}</p>
+        </div>
+      )}
 
-          <TabsContent value="saved" className="animate-in fade-in zoom-in-95 duration-500">
-            {savedTrips.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {savedTrips.map((trip, index) => (
-                  <div key={trip.id} className={`animate-in fade-in slide-in-from-bottom-8 ${cardDelayClasses[index % cardDelayClasses.length]}`}>
-                    <TripCard trip={trip} status="saved" />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                icon={<Bookmark className="w-16 h-16 text-primary" />}
-                title="No saved trips yet"
-                description="Browse our trip catalog and save your favorites to start planning your Indian adventures!"
-                actionLabel="Explore Trips"
-                actionLink="/"
-              />
-            )}
-          </TabsContent>
+      {loading && (
+        <div className="text-center py-20 flex flex-col items-center">
+          <Loader2 className="w-12 h-12 text-primary animate-spin mb-5" />
+          <p className="text-lg text-primary font-medium">Loading your saved trips...</p>
+        </div>
+      )}
 
-          <TabsContent value="completed" className="animate-in fade-in zoom-in-95 duration-500">
-            {completedTrips.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {completedTrips.map((trip, index) => (
-                  <div key={trip.id} className={`animate-in fade-in slide-in-from-bottom-8 ${cardDelayClasses[index % cardDelayClasses.length]}`}>
-                    <TripCard trip={trip} status="completed" />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <EmptyState
-                icon={<CheckCircle2 className="w-16 h-16 text-primary" />}
-                title="No completed trips yet"
-                description="Mark your trips as completed to keep track of all the amazing places you've visited in India!"
-                actionLabel="Discover Trips"
-                actionLink="/"
-              />
-            )}
-          </TabsContent>
-        </Tabs>
-      </div>
+      {!loading && (
+        <div className="max-w-7xl mx-auto">
+          <Tabs defaultValue="saved" className="w-full">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12 glass h-auto p-1.5 rounded-2xl border border-white/10">
+              <TabsTrigger
+                value="saved"
+                className="flex min-w-0 h-auto min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm leading-tight data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all"
+              >
+                <Bookmark className="w-4 h-4" />
+                Saved Trips ({savedTrips.length})
+              </TabsTrigger>
+              <TabsTrigger
+                value="completed"
+                className="flex min-w-0 h-auto min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm leading-tight data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-secondary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                Completed ({completedTrips.length})
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="saved" className="animate-in fade-in zoom-in-95 duration-500">
+              {savedTrips.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {savedTrips.map((trip, index) => (
+                    <div key={trip.id} className={`animate-in fade-in slide-in-from-bottom-8 ${cardDelayClasses[index % cardDelayClasses.length]}`}>
+                      <TripCard
+                        trip={trip}
+                        status="saved"
+                        isRemoving={removingTripId === trip.id}
+                        onRemove={() => handleRemoveTrip(trip.id)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <EmptyState
+                  icon={<Bookmark className="w-16 h-16 text-primary" />}
+                  title="No saved trips yet"
+                  description="Save a trip from the trip details page and it will appear here instantly."
+                  actionLabel="Explore Trips"
+                  actionLink="/"
+                />
+              )}
+            </TabsContent>
+
+            <TabsContent value="completed" className="animate-in fade-in zoom-in-95 duration-500">
+              {completedTrips.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {completedTrips.map((trip, index) => (
+                    <div key={trip.id} className={`animate-in fade-in slide-in-from-bottom-8 ${cardDelayClasses[index % cardDelayClasses.length]}`}>
+                      <TripCard
+                        trip={trip}
+                        status="completed"
+                        isRemoving={removingTripId === trip.id}
+                        onRemove={() => handleRemoveTrip(trip.id)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <EmptyState
+                  icon={<CheckCircle2 className="w-16 h-16 text-primary" />}
+                  title="No completed trips yet"
+                  description="Trips marked completed in your saved list will appear here."
+                  actionLabel="Explore Trips"
+                  actionLink="/"
+                />
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
+      )}
     </div>
   );
 }
@@ -96,22 +239,23 @@ export function MyTrips() {
 interface TripCardProps {
   trip: typeof trips[0];
   status: 'saved' | 'completed';
+  onRemove: () => void;
+  isRemoving: boolean;
 }
 
-function TripCard({ trip, status }: TripCardProps) {
+function TripCard({ trip, status, onRemove, isRemoving }: TripCardProps) {
   return (
     <div className="glass-card rounded-3xl transition-all duration-500 overflow-hidden group border border-white/10 hover:border-primary/40 hover:-translate-y-2 relative flex flex-col h-full">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none"></div>
-      
+
       <div className="relative h-64 overflow-hidden m-3 rounded-2xl">
         <img
           src={trip.image}
           alt={trip.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
         />
-        {/* Dynamic Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-        
+
         <div className="absolute top-4 left-4">
           <Badge
             className={
@@ -133,20 +277,13 @@ function TripCard({ trip, status }: TripCardProps) {
             )}
           </Badge>
         </div>
+
         <div className="absolute top-4 right-4">
           <Badge className="glass border-white/20 text-foreground py-1.5 px-3 backdrop-blur-md font-medium shadow-lg hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors">
             <Calendar className="w-3 h-3 mr-1.5" />
             {trip.duration}
           </Badge>
         </div>
-        
-        {status === 'completed' && (
-          <div className="absolute inset-0 bg-emerald-500/20 backdrop-blur-[2px] flex items-center justify-center animate-in fade-in duration-500">
-            <div className="glass rounded-full p-4 shadow-[0_0_30px_rgba(16,185,129,0.5)] border-2 border-emerald-400/50">
-              <CheckCircle2 className="w-12 h-12 text-emerald-400" />
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="p-6 pt-2 flex flex-col flex-grow relative z-10">
@@ -155,15 +292,28 @@ function TripCard({ trip, status }: TripCardProps) {
             {trip.category.replace('-', ' ').toUpperCase()}
           </Badge>
         </div>
-        <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight group-hover:text-primary transition-colors">{trip.name}</h3>
+        <h3 className="text-2xl font-bold text-foreground mb-3 tracking-tight">{trip.name}</h3>
         <p className="text-muted-foreground mb-6 line-clamp-2 leading-relaxed flex-grow">{trip.description}</p>
 
-        <Link to={`/trip/${trip.id}`} className="mt-auto block">
-          <Button variant="outline" className="w-full rounded-xl glass border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 group/btn h-12 text-md font-medium shadow-[0_10px_20px_rgba(15,23,42,0.10)] hover:shadow-[0_14px_30px_rgba(56,189,248,0.25)]">
-            Explore Journey
-            <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-2 transition-transform duration-300" />
+        <div className="mt-auto flex items-center gap-3">
+          <Link to={`/trip/${trip.id}`} className="flex-1">
+            <Button variant="outline" className="w-full rounded-xl glass border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 group/btn h-12 text-md font-medium shadow-[0_10px_20px_rgba(15,23,42,0.10)] hover:shadow-[0_14px_30px_rgba(56,189,248,0.25)]">
+              Explore Journey
+              <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-2 transition-transform duration-300" />
+            </Button>
+          </Link>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onRemove}
+            disabled={isRemoving}
+            className="h-12 px-4 rounded-xl border-destructive/40 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+            title="Remove from My Trips"
+          >
+            {isRemoving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
           </Button>
-        </Link>
+        </div>
       </div>
     </div>
   );

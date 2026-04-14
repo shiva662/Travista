@@ -6,6 +6,21 @@ const API_BASE_URL = 'http://localhost:5000/api';
 // Get token from localStorage
 const getToken = () => localStorage.getItem('token');
 
+const parseJsonResponse = async (res: Response) => {
+  const text = await res.text();
+  if (!text) return {};
+
+  try {
+    return JSON.parse(text);
+  } catch (_) {
+    return {
+      success: false,
+      message: 'Invalid JSON response from server',
+      raw: text,
+    };
+  }
+};
+
 // Auth API calls
 export const authAPI = {
   register: async (name: string, email: string, password: string) => {
@@ -197,4 +212,54 @@ export const aiAPI = {
 
     return data;
   }
+};
+
+// Saved Trips API calls (separate from saved places)
+export const savedTripsAPI = {
+  saveTrip: async (tripId: string) => {
+    const res = await fetch(`${API_BASE_URL}/saved-trips/${encodeURIComponent(tripId)}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+
+    const data = await parseJsonResponse(res);
+    return {
+      status: res.status,
+      success: res.ok && data?.success !== false,
+      ...data,
+    };
+  },
+
+  getMySavedTrips: async () => {
+    const res = await fetch(`${API_BASE_URL}/saved-trips/mine`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+
+    const data = await parseJsonResponse(res);
+    return {
+      status: res.status,
+      success: res.ok && data?.success !== false,
+      ...data,
+    };
+  },
+
+  deleteTrip: async (tripId: string) => {
+    const res = await fetch(`${API_BASE_URL}/saved-trips/${encodeURIComponent(tripId)}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+
+    const data = await parseJsonResponse(res);
+    return {
+      status: res.status,
+      success: res.ok && data?.success !== false,
+      ...data,
+    };
+  },
 };

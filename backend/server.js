@@ -10,6 +10,7 @@ const authRoutes = require('./routes/authRoutes');
 const placeRoutes = require('./routes/placeRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const userRoutes = require('./routes/userRoutes');
+const savedTripRoutes = require('./routes/savedTripRoutes');
 const adminRoutes = require('./routes/adminRoutes'); // New import
 const aiRoutes = require('./routes/aiRoutes');
 
@@ -38,6 +39,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/places', placeRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/saved-trips', savedTripRoutes);
 app.use('/api/admin', adminRoutes); // Mount admin routes
 app.use('/api/ai', aiRoutes);
 

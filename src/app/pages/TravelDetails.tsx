@@ -1,9 +1,12 @@
 import { useParams, useNavigate } from 'react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeft, Calendar, Bookmark, Star, MapPin, Utensils } from 'lucide-react';
 import { trips, hotels, restaurants, traditionalFoods } from '../data/mockData';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import { toast } from 'sonner';
+import { savedTripsAPI } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import {
   Accordion,
   AccordionContent,
@@ -14,8 +17,108 @@ import {
 export function TripDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isLoggedIn, logout } = useAuth();
   const trip = trips.find(t => t.id === id);
-  const [isSaved, setIsSaved] = useState(trip?.saved || false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isCheckingSaved, setIsCheckingSaved] = useState(false);
+
+  const isAuthFailure = (message?: string) => {
+    const text = String(message || '').toLowerCase();
+    return (
+      text.includes('invalid or expired token') ||
+      text.includes('no token provided') ||
+      text.includes('authentication required')
+    );
+  };
+
+  const handleAuthFailure = (message?: string) => {
+    if (!isAuthFailure(message)) return false;
+    toast.error('Session expired. Please log in again.');
+    logout();
+    navigate('/login', { replace: true });
+    return true;
+  };
+
+  useEffect(() => {
+    if (!trip || !isLoggedIn) {
+      setIsSaved(false);
+      return;
+    }
+
+    const checkSavedStatus = async () => {
+      setIsCheckingSaved(true);
+      try {
+        const response = await savedTripsAPI.getMySavedTrips();
+        if (handleAuthFailure(response?.message)) return;
+
+        if (response.success) {
+          const savedIds = Array.isArray(response.savedTrips)
+            ? response.savedTrips.map((item: { tripId: string }) => String(item.tripId))
+            : [];
+          setIsSaved(savedIds.includes(trip.id));
+        }
+      } catch (_) {
+        // Keep the page usable even if status check fails.
+      } finally {
+        setIsCheckingSaved(false);
+      }
+    };
+
+    void checkSavedStatus();
+  }, [isLoggedIn, trip?.id]);
+
+  const handleToggleSavedTrip = async () => {
+    if (!trip || isSaving) return;
+
+    if (!isLoggedIn) {
+      toast.error('Please log in to save this trip.');
+      navigate('/login');
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      if (isSaved) {
+        const response = await savedTripsAPI.deleteTrip(trip.id);
+        if (handleAuthFailure(response?.message)) return;
+
+        if (response.success || response.status === 404) {
+          setIsSaved(false);
+          toast.success(response.status === 404 ? 'Trip already removed.' : 'Trip removed from My Trips.');
+          return;
+        }
+
+        toast.error(response.message || 'Failed to remove trip.');
+        return;
+      }
+
+      const response = await savedTripsAPI.saveTrip(trip.id);
+      if (handleAuthFailure(response?.message)) return;
+
+      if (response.success) {
+        setIsSaved(true);
+        toast.success('Trip saved to My Trips.');
+        return;
+      }
+
+      if (response.status === 409) {
+        setIsSaved(true);
+        toast.info(response.message || 'Trip already saved.');
+        return;
+      }
+
+      toast.error(response.message || 'Failed to save trip.');
+    } catch (_) {
+      toast.error('Network error while saving trip. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCardClick = (label: string) => {
+    toast.info(`${label} details coming soon.`);
+  };
 
   if (!trip) {
     return (
@@ -75,7 +178,8 @@ export function TripDetails() {
             <div className="md:w-72 glass-card p-6 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-xl shrink-0 animate-in slide-in-from-right-8 duration-700 delay-300">
               <h3 className="text-lg font-bold mb-4 text-foreground text-center">Journey Quick Add</h3>
               <Button
-                onClick={() => setIsSaved(!isSaved)}
+                onClick={handleToggleSavedTrip}
+                disabled={isSaving || isCheckingSaved}
                 className={`w-full h-14 text-lg font-medium shadow-[0_0_20px_rgba(0,0,0,0.3)] transition-all hover:scale-105 ${
                   isSaved
                     ? 'glass text-primary border-primary/50 bg-primary/10'
@@ -83,7 +187,7 @@ export function TripDetails() {
                 }`}
               >
                 <Bookmark className={`mr-2 w-5 h-5 ${isSaved ? 'fill-current text-primary' : ''}`} />
-                {isSaved ? 'Saved to Collection' : 'Save this Journey'}
+                {isCheckingSaved ? 'Checking...' : isSaving ? 'Updating...' : isSaved ? 'Saved to Collection' : 'Save this Journey'}
               </Button>
             </div>
           </div>
@@ -112,7 +216,7 @@ export function TripDetails() {
                 <div className="bg-secondary/20 p-3 rounded-xl border border-secondary/30">
                   <Calendar className="w-6 h-6 text-secondary" />
                 </div>
-                <h2 className="text-3xl font-bold text-foreground">Itinerary breakdown</h2>
+                <h2 className="text-3xl font-bold text-foreground">Itinerary Breakdown</h2>
               </div>
               
               <Accordion type="single" collapsible className="w-full space-y-4">
@@ -152,7 +256,12 @@ export function TripDetails() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {tripFoods.map((food) => (
-                    <div key={food.id} className="glass border border-white/10 rounded-2xl overflow-hidden hover:border-secondary/40 transition-colors group bg-background/40">
+                    <button
+                      type="button"
+                      key={food.id}
+                      onClick={() => handleCardClick(food.name)}
+                      className="w-full text-left glass border border-white/10 rounded-2xl overflow-hidden hover:border-secondary/40 hover:shadow-[0_0_22px_rgba(56,189,248,0.18)] hover:-translate-y-0.5 transition-all duration-300 group bg-background/40 cursor-pointer"
+                    >
                       <div className="h-48 overflow-hidden relative">
                         <img
                           src={food.image}
@@ -163,14 +272,14 @@ export function TripDetails() {
                         <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
                           <h3 className="font-bold text-xl text-foreground text-glow">{food.name}</h3>
                           <Badge className={food.type === 'veg' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50 backdrop-blur-md' : 'bg-destructive/20 text-destructive border-destructive/50 backdrop-blur-md'}>
-                            {food.type === 'veg' ? '🥬 Veg' : '🍖 Non-Veg'}
+                            {food.category || (food.type === 'veg' ? 'Veg' : 'Non-Veg')}
                           </Badge>
                         </div>
                       </div>
                       <div className="p-5">
                         <p className="text-muted-foreground text-sm leading-relaxed">{food.description}</p>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </section>
@@ -178,11 +287,12 @@ export function TripDetails() {
           </div>
 
           {/* Right Column - Places to Stay & Eat */}
-          <div className="lg:col-span-1 space-y-8">
+          <div className="lg:col-span-1">
+            <div className="space-y-8 lg:sticky lg:top-24">
             
             {/* Nearby Hotels */}
             {tripHotels.length > 0 && (
-              <section className="glass-card rounded-[2rem] p-6 shadow-xl border border-white/10 sticky top-24">
+              <section className="glass-card rounded-[2rem] p-6 shadow-xl border border-white/10">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="bg-primary/20 p-2.5 rounded-xl border border-primary/30">
                     <MapPin className="w-5 h-5 text-primary" />
@@ -191,7 +301,12 @@ export function TripDetails() {
                 </div>
                 <div className="space-y-4">
                   {tripHotels.map((hotel) => (
-                    <div key={hotel.id} className="bg-background/40 border border-border rounded-2xl overflow-hidden hover:border-primary/30 transition-colors group flex flex-col sm:flex-row lg:flex-col group/hotel">
+                    <button
+                      type="button"
+                      key={hotel.id}
+                      onClick={() => handleCardClick(hotel.name)}
+                      className="w-full text-left bg-background/40 border border-border rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-[0_0_18px_rgba(56,189,248,0.2)] hover:-translate-y-0.5 transition-all duration-300 group flex flex-col sm:flex-row lg:flex-col group/hotel cursor-pointer"
+                    >
                       <div className="sm:w-1/3 lg:w-full h-32 lg:h-40 overflow-hidden relative">
                         <img
                           src={hotel.image}
@@ -209,12 +324,12 @@ export function TripDetails() {
                         <p className="text-muted-foreground text-sm mb-3 flex items-center gap-1">
                           <MapPin className="w-3 h-3" /> {hotel.location}
                         </p>
-                        <div className="flex items-center gap-1.5 mt-auto">
+                        <div className="flex items-center gap-1.5 mt-auto bg-primary/10 border border-primary/20 px-2.5 py-1 rounded-full w-fit">
                           <Star className="w-4 h-4 fill-sky-400 text-sky-400" />
                           <span className="font-bold text-sm text-foreground">{hotel.rating}</span>
                         </div>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </section>
@@ -231,8 +346,13 @@ export function TripDetails() {
                 </div>
                 <div className="space-y-4">
                   {tripRestaurants.map((restaurant) => (
-                    <div key={restaurant.id} className="bg-background/40 border border-border rounded-xl p-4 hover:border-secondary/40 transition-colors flex gap-4 items-center">
-                      <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0">
+                    <button
+                      type="button"
+                      key={restaurant.id}
+                      onClick={() => handleCardClick(restaurant.name)}
+                      className="w-full text-left bg-background/40 border border-border rounded-xl p-4 hover:border-secondary/40 hover:shadow-[0_0_18px_rgba(56,189,248,0.2)] transition-all duration-300 flex gap-4 items-center cursor-pointer"
+                    >
+                      <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 ring-2 ring-secondary/25">
                         <img
                           src={restaurant.image}
                           alt={restaurant.name}
@@ -243,18 +363,18 @@ export function TripDetails() {
                         <h3 className="font-bold mb-1 text-foreground text-sm md:text-base">{restaurant.name}</h3>
                         <div className="flex items-center justify-between">
                           <Badge variant="outline" className="text-[10px] uppercase tracking-wider border-secondary/30 text-secondary">{restaurant.cuisine}</Badge>
-                          <div className="flex items-center gap-1 text-sm bg-muted/50 px-2 py-0.5 rounded-md">
+                          <div className="flex items-center gap-1 text-sm bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
                             <Star className="w-3 h-3 fill-sky-400 text-sky-400" />
-                            <span className="font-medium text-foreground">{restaurant.rating}</span>
+                            <span className="font-semibold text-foreground">{restaurant.rating}</span>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </section>
             )}
-            
+            </div>
           </div>
         </div>
       </div>

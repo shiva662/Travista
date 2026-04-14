@@ -39,6 +39,7 @@ export interface Food {
   image: string;
   description: string;
   type: 'veg' | 'non-veg';
+  category?: string;
 }
 
 export interface DiaryPost {
@@ -93,7 +94,7 @@ export const trips: Trip[] = [
     id: '2',
     name: 'Weekend in Rishikesh',
     category: 'weekend',
-    duration: '2-3 Days',
+    duration: '2 Days',
     image: 'https://images.unsplash.com/photo-1701709488066-8d32fe5871b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyaXNoaWtlc2glMjB5b2dhJTIwaW5kaWF8ZW58MXx8fHwxNzcxODcyODI0fDA&ixlib=rb-4.1.0&q=80&w=1080',
     description: 'Yoga capital of the world - Spiritual retreat by the Ganges',
     overview: 'Find peace and adventure in Rishikesh with yoga sessions, river rafting, and spiritual experiences along the holy Ganges.',
@@ -878,6 +879,110 @@ export const hotels: { [tripId: string]: Hotel[] } = {
       rating: 4.8,
       type: 'Boutique Heritage'
     }
+  ],
+  '2': [
+    {
+      id: 'h2-1',
+      name: 'The Sitting Elephant Stay',
+      image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3RlbCUyMHJvb20lMjBsdXh1cnl8ZW58MXx8fHwxNzc1ODUxNzQ3fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Rishikesh, Uttarakhand',
+      rating: 4.5,
+      type: 'Luxury'
+    },
+    {
+      id: 'h2-2',
+      name: 'Freedom Retreat Stay',
+      image: 'https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3V0aXF1ZSUyMGhvdGVsfGVufDF8fHx8MTc3NTg1MTc1NHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Tapovan, Rishikesh',
+      rating: 4.6,
+      type: 'Boutique'
+    },
+    {
+      id: 'h2-3',
+      name: 'Ganga View Residency',
+      image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZXJpdGFnZSUyMGhvdGVsfGVufDF8fHx8MTc3NTg1MTc1OHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Rishikesh, Uttarakhand',
+      rating: 4.3,
+      type: 'Heritage'
+    }
+  ],
+  '3': [
+    {
+      id: 'h3-1',
+      name: 'Taj Lake Palace',
+      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYWtlJTIwcGFsYWNlJTIwaG90ZWx8ZW58MXx8fHwxNzc1ODUxODkzfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Udaipur, Rajasthan',
+      rating: 4.8,
+      type: 'Luxury Lake View'
+    },
+    {
+      id: 'h3-2',
+      name: 'The Oberoi Udaivilas',
+      image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjBob3RlbHxlbnwxfHx8fDE3NzU4NTE5MDN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Udaipur, Rajasthan',
+      rating: 4.9,
+      type: 'Luxury Heritage'
+    },
+    {
+      id: 'h3-3',
+      name: 'Jagat Niwas Palace',
+      image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3V0aXF1ZSUyMHBhbGFjZSUyMGhvdGVsfGVufDF8fHx8MTc3NTg1MTkwOXww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Udaipur, Rajasthan',
+      rating: 4.6,
+      type: 'Boutique Lake View'
+    }
+  ],
+  '4': [
+    {
+      id: 'h4-1',
+      name: 'Le Pondy Resort',
+      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiZWFjaCUyMHJlc29ydHxlbnwxfHx8fDE3NzU4NTIyMTR8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Pondicherry, India',
+      rating: 4.5,
+      type: 'Beach Resort'
+    },
+    {
+      id: 'h4-2',
+      name: 'Palais de Mahe',
+      image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3V0aXF1ZSUyMGhlcml0YWdlJTIwaG90ZWx8ZW58MXx8fHwxNzc1ODUyMjIwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Pondicherry, India',
+      rating: 4.6,
+      type: 'Boutique Heritage'
+    },
+    {
+      id: 'h4-3',
+      name: 'Villa Shanti',
+      image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmcmVuY2glMjBjb2xvbmlhbCUyMGhvdGVsfGVufDF8fHx8MTc3NTg1MjIzMHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Pondicherry, India',
+      rating: 4.4,
+      type: 'French Colonial Boutique'
+    }
+  ],
+  '5': [
+    {
+      id: 'h5-1',
+      name: 'Kumarakom Lake Resort',
+      image: 'https://cdn.audleytravel.com/1050/750/79/16032636-the-vembanad-restaurant-at-kumarakom-lake-resort.webp',
+      location: 'Kerala, India',
+      rating: 4.7,
+      type: 'Luxury Backwater'
+    },
+    {
+      id: 'h5-2',
+      name: 'Taj Bekal Resort & Spa',
+      image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiZWFjaCUyMHJlc29ydCUyMGluZGlhfGVufDF8fHx8MTc3NTg1Mjc2M3ww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Kerala, India',
+      rating: 4.6,
+      type: 'Beach Resort'
+    },
+    {
+      id: 'h5-3',
+      name: 'Spice Village, Thekkady',
+      image: 'https://www.keralatourism.org/images/service-providers/photos/property-2587-profile-4192-20180704153755.jpg',
+      location: 'Kerala, India',
+      rating: 4.5,
+      type: 'Eco Resort'
+    }
   ]
 };
 
@@ -906,6 +1011,142 @@ export const restaurants: { [tripId: string]: Restaurant[] } = {
       location: 'Johari Bazaar, Jaipur',
       rating: 4.6,
       cuisine: 'Rajasthani Snacks'
+    }
+  ],
+  '2': [
+    {
+      id: 'r2-1',
+      name: 'The Sitting Elephant',
+      image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyb29mdG9wJTIwY2FmZXxlbnwxfHx8fDE3NzU4NTE3NjN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Laxman Jhula, Rishikesh',
+      rating: 4.5,
+      cuisine: 'Rooftop Cafe'
+    },
+    {
+      id: 'r2-2',
+      name: 'Little Buddha Cafe',
+      image: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWZlJTIwYnJlYWtmYXN0fGVufDF8fHx8MTc3NTg1MTc3MHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Tapovan, Rishikesh',
+      rating: 4.3,
+      cuisine: 'Cafe and Breakfast'
+    },
+    {
+      id: 'r2-3',
+      name: 'Freedom Cafe',
+      image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZWFsdGh5JTIwY2FmZXxlbnwxfHx8fDE3NzU4NTE3NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Laxman Jhula Road, Rishikesh',
+      rating: 4.6,
+      cuisine: 'Healthy and Vegan'
+    },
+    {
+      id: 'r2-4',
+      name: 'Chotiwala Restaurant',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjByZXN0YXVyYW50fGVufDF8fHx8MTc3NTg1MTc4Mnww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Swarg Ashram, Rishikesh',
+      rating: 4.0,
+      cuisine: 'Traditional Indian'
+    }
+  ],
+  '3': [
+    {
+      id: 'r3-1',
+      name: 'Ambrai Restaurant',
+      image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyb29mdG9wJTIwcmVzdGF1cmFudCUyMGxha2V8ZW58MXx8fHwxNzc1ODUxOTE2fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Udaipur, Rajasthan',
+      rating: 4.6,
+      cuisine: 'Rooftop Lake View'
+    },
+    {
+      id: 'r3-2',
+      name: 'Upre by 1559 AD',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaW5lJTIwZGluaW5nfGVufDF8fHx8MTc3NTg1MTkyNHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Udaipur, Rajasthan',
+      rating: 4.5,
+      cuisine: 'Fine Dining'
+    },
+    {
+      id: 'r3-3',
+      name: 'Natraj Dining Hall',
+      image: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYWphc3RoYW5pJTIwdGhhbGl8ZW58MXx8fHwxNzc1ODUxOTMyfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Udaipur, Rajasthan',
+      rating: 4.4,
+      cuisine: 'Traditional Rajasthani Thali'
+    },
+    {
+      id: 'r3-4',
+      name: "Jheel's Ginger Coffee Bar",
+      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWZlJTIwYnJlYWtmYXN0JTIwZm9vZHxlbnwxfHx8fDE3NzU4NTE5Mzh8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Udaipur, Rajasthan',
+      rating: 4.3,
+      cuisine: 'Cafe and Breakfast'
+    }
+  ],
+  '4': [
+    {
+      id: 'r4-1',
+      name: 'Cafe des Arts',
+      image: 'https://images.unsplash.com/photo-1445116572660-236099ec97a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmcmVuY2glMjBjYWZlfGVufDF8fHx8MTc3NTg1MjI0MHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Pondicherry, India',
+      rating: 4.5,
+      cuisine: 'French Cafe'
+    },
+    {
+      id: 'r4-2',
+      name: 'Surguru Restaurant',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb3V0aCUyMGluZGlhbiUyMHJlc3RhdXJhbnR8ZW58MXx8fHwxNzc1ODUyMjQ3fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Pondicherry, India',
+      rating: 4.4,
+      cuisine: 'South Indian Vegetarian'
+    },
+    {
+      id: 'r4-3',
+      name: 'Villa Shanti Restaurant',
+      image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaW5lJTIwZGluaW5nJTIwcmVzdGF1cmFudHxlbnwxfHx8fDE3NzU4NTIyNTR8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Pondicherry, India',
+      rating: 4.6,
+      cuisine: 'Fine Dining'
+    },
+    {
+      id: 'r4-4',
+      name: 'Baker Street',
+      image: 'https://images.unsplash.com/photo-1453614512568-c4024d13c247?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWtlcnklMjBjYWZlfGVufDF8fHx8MTc3NTg1MjI2MXww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Pondicherry, India',
+      rating: 4.3,
+      cuisine: 'Bakery and Cafe'
+    }
+  ],
+  '5': [
+    {
+      id: 'r5-1',
+      name: 'Dhe Puttu (Kochi)',
+      image: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxrZXJhbGElMjByZXN0YXVyYW50fGVufDF8fHx8MTc3NTg1Mjc5M3ww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Kochi, Kerala, India',
+      rating: 4.4,
+      cuisine: 'Traditional Kerala'
+    },
+    {
+      id: 'r5-2',
+      name: 'Kashi Art Cafe',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWZlJTIwZnVzaW9ufGVufDF8fHx8MTc3NTg1MjgwNnww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Fort Kochi, Kerala, India',
+      rating: 4.5,
+      cuisine: 'Cafe and Fusion'
+    },
+    {
+      id: 'r5-3',
+      name: 'Grand Pavilion',
+      image: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZWFmb29kJTIwcmVzdGF1cmFudHxlbnwxfHx8fDE3NzU4NTI4MTh8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Ernakulam, Kerala, India',
+      rating: 4.3,
+      cuisine: 'South Indian and Seafood'
+    },
+    {
+      id: 'r5-4',
+      name: 'Paragon Restaurant (Kozhikode)',
+      image: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxrZXJhbGElMjBiaXJ5YW5pfGVufDF8fHx8MTc3NTg1MjgzNnww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Kozhikode, Kerala, India',
+      rating: 4.6,
+      cuisine: 'Famous Kerala Cuisine'
     }
   ]
 };
@@ -941,34 +1182,132 @@ export const traditionalFoods: { [tripId: string]: Food[] } = {
       type: 'veg'
     }
   ],
-  '5': [
+  '2': [
     {
-      id: 'f5',
-      name: 'Appam with Stew',
-      image: 'https://images.unsplash.com/photo-1665660710687-b44c50751054?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb3V0aCUyMGluZGlhbiUyMGRvc2F8ZW58MXx8fHwxNzcxODI3MTM2fDA&ixlib=rb-4.1.0&q=80&w=1080',
-      description: 'Soft rice pancakes served with coconut milk-based vegetable stew',
+      id: 'f2-1',
+      name: 'Aloo Puri',
+      image: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBicmVha2Zhc3R8ZW58MXx8fHwxNzc1ODUxNzg4fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'A comforting North Indian breakfast served hot with mildly spiced potato curry.',
       type: 'veg'
     },
     {
-      id: 'f6',
-      name: 'Kerala Sadya',
+      id: 'f2-2',
+      name: 'Garhwali Rajma Chawal',
+      image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYWptYSUyMGNoYXdhbHxlbnwxfHx8fDE3NzU4NTE3OTR8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Local hill-style kidney bean curry served with steamed rice and fresh herbs.',
+      type: 'veg'
+    },
+    {
+      id: 'f2-3',
+      name: 'Kafuli',
+      image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2ZWclMjBjdXJyeXxlbnwxfHx8fDE3NzU4NTE4MDB8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'A signature Uttarakhand spinach and fenugreek dish with earthy mountain flavors.',
+      type: 'veg'
+    },
+    {
+      id: 'f2-4',
+      name: 'River Trout Curry',
+      image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaXNoJTIwY3Vycnl8ZW58MXx8fHwxNzc1ODUxODA2fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Fresh trout cooked in aromatic local spices, a classic from Himalayan riverside kitchens.',
+      type: 'non-veg'
+    }
+  ],
+  '3': [
+    {
+      id: 'f3-1',
+      name: 'Dal Baati Churma',
       image: 'https://images.unsplash.com/photo-1764699486769-fc9a8b03130a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB0aGFsaSUyMHRyYWRpdGlvbmFsJTIwZm9vZHxlbnwxfHx8fDE3NzE4NzI4Mjd8MA&ixlib=rb-4.1.0&q=80&w=1080',
-      description: 'Traditional vegetarian feast served on banana leaf with 26+ dishes',
+      description: 'A Rajasthani signature plate of baked wheat dumplings, lentils, and sweet churma.',
       type: 'veg'
     },
     {
-      id: 'f7',
-      name: 'Karimeen Pollichathu',
+      id: 'f3-2',
+      name: 'Gatte ki Sabzi',
+      image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBjdXJyeSUyMHZlZ3xlbnwxfHx8fDE3NzU4NTE5NDV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Gram flour dumplings cooked in a rich yogurt gravy, a Udaipur home-style favorite.',
+      type: 'veg'
+    },
+    {
+      id: 'f3-3',
+      name: 'Laal Maas',
       image: 'https://images.unsplash.com/photo-1764314108477-f026172e32a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBjdXJyeSUyMHRyYWRpdGlvbmFsfGVufDF8fHx8MTc3MTg3MjgzNHww&ixlib=rb-4.1.0&q=80&w=1080',
-      description: 'Pearl spot fish marinated and wrapped in banana leaf',
+      description: 'A bold mutton curry made with Mathania chilies and aromatic Rajasthani spices.',
       type: 'non-veg'
     },
     {
-      id: 'f8',
-      name: 'Payasam',
-      image: 'https://images.unsplash.com/photo-1617266983060-5b7c6fc19b30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXNhbGElMjBjaGFpJTIwdGVhJTIwaW5kaWF8ZW58MXx8fHwxNzcxODIxOTE5fDA&ixlib=rb-4.1.0&q=80&w=1080',
-      description: 'Sweet milk-based dessert with rice or vermicelli',
+      id: 'f3-4',
+      name: 'Ghewar',
+      image: 'https://images.unsplash.com/photo-1613292443284-8d10ef9383fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBzdHJlZXQlMjBmb29kfGVufDF8fHx8MTc3MTgyNDgzNXww&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'A honeycomb-like festive sweet soaked in syrup and topped with dry fruits.',
       type: 'veg'
+    }
+  ],
+  '4': [
+    {
+      id: 'f4-1',
+      name: 'French Pastries',
+      image: 'https://images.unsplash.com/photo-1483695028939-5bb13f8648b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwYXN0cnl8ZW58MXx8fHwxNzc1ODUyMjcxfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Buttery, flaky delights inspired by Pondicherry\'s French culinary heritage.',
+      type: 'veg',
+      category: 'French Dessert'
+    },
+    {
+      id: 'f4-2',
+      name: 'Crepes',
+      image: 'https://images.unsplash.com/photo-1464306076886-da185f6a9d05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcmVwZXN8ZW58MXx8fHwxNzc1ODUyMjc4fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Thin French pancakes served sweet or savory, popular in White Town cafes.',
+      type: 'veg',
+      category: 'Cafe Special'
+    },
+    {
+      id: 'f4-3',
+      name: 'South Indian Thali',
+      image: 'https://images.unsplash.com/photo-1764699486769-fc9a8b03130a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB0aGFsaXxlbnwxfHx8fDE3NzU4NTIyODR8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'A complete vegetarian meal featuring rice, sambar, rasam, poriyal, and chutneys.',
+      type: 'veg',
+      category: 'Local Meal'
+    },
+    {
+      id: 'f4-4',
+      name: 'Seafood Curry',
+      image: 'https://images.unsplash.com/photo-1631452180539-96aca7d48617?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZWFmb29kJTIwY3Vycnl8ZW58MXx8fHwxNzc1ODUyMjkwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Fresh coastal catch simmered in a spiced coconut-tamarind gravy with local flavors.',
+      type: 'non-veg',
+      category: 'Coastal Special'
+    }
+  ],
+  '5': [
+    {
+      id: 'f5-1',
+      name: 'Kerala Sadya',
+      image: 'https://images.unsplash.com/photo-1764699486769-fc9a8b03130a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB0aGFsaSUyMHRyYWRpdGlvbmFsJTIwZm9vZHxlbnwxfHx8fDE3NzE4NzI4Mjd8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'A festive vegetarian platter served on banana leaf with a variety of classic Kerala sides.',
+      type: 'veg',
+      category: 'Veg'
+    },
+    {
+      id: 'f5-2',
+      name: 'Appam & Stew',
+      image: 'https://images.unsplash.com/photo-1665660710687-b44c50751054?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb3V0aCUyMGluZGlhbiUyMGRvc2F8ZW58MXx8fHwxNzcxODI3MTM2fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Soft lace-edged rice pancakes paired with aromatic stew available in veg or chicken styles.',
+      type: 'veg',
+      category: 'Veg/Non-Veg'
+    },
+    {
+      id: 'f5-3',
+      name: 'Malabar Biryani',
+      image: 'https://www.recipesaresimple.com/wp-content/uploads/2015/06/MALABAR-CHICKEN-BIRYANI.jpg',
+      description: 'Fragrant rice cooked with spiced meat and fried onions, a signature dish from north Kerala.',
+      type: 'non-veg',
+      category: 'Non-Veg'
+    },
+    {
+      id: 'f5-4',
+      name: 'Karimeen Pollichathu',
+      image: 'https://images.unsplash.com/photo-1764314108477-f026172e32a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBjdXJyeSUyMHRyYWRpdGlvbmFsfGVufDF8fHx8MTc3MTg3MjgzNHww&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Pearl spot fish marinated in spices, wrapped in banana leaf, and pan-roasted to perfection.',
+      type: 'non-veg',
+      category: 'Fish'
     }
   ]
 };

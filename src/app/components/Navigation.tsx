@@ -58,7 +58,6 @@ export function Navigation() {
     { name: 'Home', path: '/' },
     { name: 'Places', path: '/places' },
     { name: 'AI Planner', path: '/ai-planner' },
-    ...(isLoggedIn ? [{ name: 'Saved', path: '/saved' }] : []),
     { name: 'Travel Diary', path: '/travel-diary' },
     { name: 'My Trips', path: '/my-trips' },
   ];
