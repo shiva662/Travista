@@ -1,7 +1,17 @@
 import { useParams, useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import { ArrowLeft, Calendar, Bookmark, Star, MapPin, Utensils } from 'lucide-react';
-import { trips, hotels, restaurants, traditionalFoods } from '../data/mockData';
+import {
+  trips,
+  hotels,
+  restaurants,
+  traditionalFoods,
+  combinedDestinationContentByKey,
+  tripCombinedDestinationMap,
+  type Food,
+  type Hotel,
+  type Restaurant,
+} from '../data/mockData';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { toast } from 'sonner';
@@ -14,6 +24,144 @@ import {
   AccordionTrigger,
 } from '../components/ui/accordion';
 
+interface CulinaryCardProps {
+  food: Food;
+  onClick: (label: string) => void;
+}
+
+interface RestaurantCompactCardProps {
+  restaurant: Restaurant;
+  onClick: (label: string) => void;
+}
+
+interface HotelStayCardProps {
+  hotel: Hotel;
+  onClick: (label: string) => void;
+}
+
+const getFoodBadgeClass = (food: Food) => {
+  const tag = String(food.category || '').toLowerCase();
+
+  if (tag.includes('dessert')) {
+    return 'bg-amber-500/20 text-amber-300 border-amber-500/50 backdrop-blur-md';
+  }
+
+  if (tag.includes('snack')) {
+    return 'bg-orange-500/20 text-orange-300 border-orange-500/50 backdrop-blur-md';
+  }
+
+  return food.type === 'veg'
+    ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50 backdrop-blur-md'
+    : 'bg-destructive/20 text-destructive border-destructive/50 backdrop-blur-md';
+};
+
+function CulinaryCard({ food, onClick }: CulinaryCardProps) {
+  return (
+    <button
+      type="button"
+      onClick={() => onClick(food.name)}
+      className="w-full text-left glass border border-white/10 rounded-2xl overflow-hidden hover:border-secondary/40 hover:shadow-[0_0_22px_rgba(56,189,248,0.18)] hover:-translate-y-0.5 transition-all duration-300 group bg-background/40 cursor-pointer"
+    >
+      <div className="h-48 overflow-hidden relative">
+        <img
+          src={food.image}
+          alt={food.name}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+        <div className="absolute bottom-4 left-4 right-4">
+          <h3 className="font-bold text-xl text-foreground text-glow">{food.name}</h3>
+        </div>
+      </div>
+      <div className="p-5 space-y-3">
+        <p className="text-muted-foreground text-sm leading-relaxed">{food.description}</p>
+        <div className="flex flex-wrap gap-2 items-center">
+          <Badge className={getFoodBadgeClass(food)}>
+            {food.category || (food.type === 'veg' ? 'Veg' : 'Non-Veg')}
+          </Badge>
+          {food.locationTag && (
+            <Badge
+              variant="outline"
+              className="text-[10px] uppercase tracking-wider border-primary/30 text-primary bg-primary/10"
+            >
+              {food.locationTag}
+            </Badge>
+          )}
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function RestaurantCompactCard({ restaurant, onClick }: RestaurantCompactCardProps) {
+  return (
+    <button
+      type="button"
+      onClick={() => onClick(restaurant.name)}
+      className="w-full text-left bg-background/40 border border-border rounded-xl p-4 hover:border-secondary/40 hover:shadow-[0_0_18px_rgba(56,189,248,0.2)] transition-all duration-300 flex gap-4 items-center cursor-pointer"
+    >
+      <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 ring-2 ring-secondary/25">
+        <img src={restaurant.image} alt={restaurant.name} className="w-full h-full object-cover" />
+      </div>
+      <div className="flex-grow min-w-0">
+        <h3 className="font-bold mb-2 text-foreground text-sm md:text-base truncate">{restaurant.name}</h3>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge
+            variant="outline"
+            className="text-[10px] uppercase tracking-wider border-primary/30 text-primary bg-primary/10"
+          >
+            {restaurant.location}
+          </Badge>
+          <Badge variant="outline" className="text-[10px] uppercase tracking-wider border-secondary/30 text-secondary">
+            {restaurant.cuisine}
+          </Badge>
+          <div className="ml-auto flex items-center gap-1 text-sm bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
+            <Star className="w-3 h-3 fill-sky-400 text-sky-400" />
+            <span className="font-semibold text-foreground">{restaurant.rating}</span>
+          </div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function HotelStayCard({ hotel, onClick }: HotelStayCardProps) {
+  return (
+    <button
+      type="button"
+      onClick={() => onClick(hotel.name)}
+      className="w-full text-left bg-background/40 border border-border rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-[0_0_18px_rgba(56,189,248,0.2)] hover:-translate-y-0.5 transition-all duration-300 group flex flex-col sm:flex-row lg:flex-col group/hotel cursor-pointer"
+    >
+      <div className="sm:w-1/3 lg:w-full h-32 lg:h-40 overflow-hidden relative">
+        <img
+          src={hotel.image}
+          alt={hotel.name}
+          className="w-full h-full object-cover group-hover/hotel:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute top-2 right-2">
+          <Badge className="bg-background/80 text-foreground border-white/10 backdrop-blur-md font-bold text-xs uppercase shadow-lg">
+            {hotel.type}
+          </Badge>
+        </div>
+      </div>
+      <div className="p-4 sm:w-2/3 lg:w-full flex flex-col justify-center gap-2">
+        <h3 className="font-bold text-lg text-foreground group-hover/hotel:text-primary transition-colors">{hotel.name}</h3>
+        <Badge
+          variant="outline"
+          className="text-[10px] uppercase tracking-wider border-primary/30 text-primary bg-primary/10 w-fit"
+        >
+          <MapPin className="w-3 h-3 mr-1" />
+          {hotel.location}
+        </Badge>
+        <div className="flex items-center gap-1.5 mt-1 bg-primary/10 border border-primary/20 px-2.5 py-1 rounded-full w-fit">
+          <Star className="w-4 h-4 fill-sky-400 text-sky-400" />
+          <span className="font-bold text-sm text-foreground">{hotel.rating}</span>
+        </div>
+      </div>
+    </button>
+  );
+}
+
 export function TripDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -22,6 +170,10 @@ export function TripDetails() {
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isCheckingSaved, setIsCheckingSaved] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   const isAuthFailure = (message?: string) => {
     const text = String(message || '').toLowerCase();
@@ -133,9 +285,13 @@ export function TripDetails() {
     );
   }
 
-  const tripHotels = hotels[id || ''] || [];
-  const tripRestaurants = restaurants[id || ''] || [];
-  const tripFoods = traditionalFoods[id || ''] || [];
+  const combinedDestinationKey = id ? tripCombinedDestinationMap[id] : undefined;
+  const combinedDestinationContent = combinedDestinationKey
+    ? combinedDestinationContentByKey[combinedDestinationKey]
+    : undefined;
+  const tripHotels = combinedDestinationContent?.premiumStays ?? hotels[id || ''] ?? [];
+  const tripRestaurants = combinedDestinationContent?.restaurants ?? restaurants[id || ''] ?? [];
+  const tripFoods = combinedDestinationContent?.culinaryDelights ?? traditionalFoods[id || ''] ?? [];
 
   return (
     <div className="min-h-screen pb-20">
@@ -256,30 +412,7 @@ export function TripDetails() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {tripFoods.map((food) => (
-                    <button
-                      type="button"
-                      key={food.id}
-                      onClick={() => handleCardClick(food.name)}
-                      className="w-full text-left glass border border-white/10 rounded-2xl overflow-hidden hover:border-secondary/40 hover:shadow-[0_0_22px_rgba(56,189,248,0.18)] hover:-translate-y-0.5 transition-all duration-300 group bg-background/40 cursor-pointer"
-                    >
-                      <div className="h-48 overflow-hidden relative">
-                        <img
-                          src={food.image}
-                          alt={food.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
-                        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
-                          <h3 className="font-bold text-xl text-foreground text-glow">{food.name}</h3>
-                          <Badge className={food.type === 'veg' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50 backdrop-blur-md' : 'bg-destructive/20 text-destructive border-destructive/50 backdrop-blur-md'}>
-                            {food.category || (food.type === 'veg' ? 'Veg' : 'Non-Veg')}
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="p-5">
-                        <p className="text-muted-foreground text-sm leading-relaxed">{food.description}</p>
-                      </div>
-                    </button>
+                    <CulinaryCard key={food.id} food={food} onClick={handleCardClick} />
                   ))}
                 </div>
               </section>
@@ -301,35 +434,11 @@ export function TripDetails() {
                 </div>
                 <div className="space-y-4">
                   {tripHotels.map((hotel) => (
-                    <button
-                      type="button"
+                    <HotelStayCard
                       key={hotel.id}
-                      onClick={() => handleCardClick(hotel.name)}
-                      className="w-full text-left bg-background/40 border border-border rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-[0_0_18px_rgba(56,189,248,0.2)] hover:-translate-y-0.5 transition-all duration-300 group flex flex-col sm:flex-row lg:flex-col group/hotel cursor-pointer"
-                    >
-                      <div className="sm:w-1/3 lg:w-full h-32 lg:h-40 overflow-hidden relative">
-                        <img
-                          src={hotel.image}
-                          alt={hotel.name}
-                          className="w-full h-full object-cover group-hover/hotel:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute top-2 right-2">
-                          <Badge className="bg-background/80 text-foreground border-white/10 backdrop-blur-md font-bold text-xs uppercase shadow-lg">
-                            {hotel.type}
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="p-4 sm:w-2/3 lg:w-full flex flex-col justify-center">
-                        <h3 className="font-bold text-lg mb-1 text-foreground group-hover/hotel:text-primary transition-colors">{hotel.name}</h3>
-                        <p className="text-muted-foreground text-sm mb-3 flex items-center gap-1">
-                          <MapPin className="w-3 h-3" /> {hotel.location}
-                        </p>
-                        <div className="flex items-center gap-1.5 mt-auto bg-primary/10 border border-primary/20 px-2.5 py-1 rounded-full w-fit">
-                          <Star className="w-4 h-4 fill-sky-400 text-sky-400" />
-                          <span className="font-bold text-sm text-foreground">{hotel.rating}</span>
-                        </div>
-                      </div>
-                    </button>
+                      hotel={hotel}
+                      onClick={handleCardClick}
+                    />
                   ))}
                 </div>
               </section>
@@ -346,30 +455,11 @@ export function TripDetails() {
                 </div>
                 <div className="space-y-4">
                   {tripRestaurants.map((restaurant) => (
-                    <button
-                      type="button"
+                    <RestaurantCompactCard
                       key={restaurant.id}
-                      onClick={() => handleCardClick(restaurant.name)}
-                      className="w-full text-left bg-background/40 border border-border rounded-xl p-4 hover:border-secondary/40 hover:shadow-[0_0_18px_rgba(56,189,248,0.2)] transition-all duration-300 flex gap-4 items-center cursor-pointer"
-                    >
-                      <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 ring-2 ring-secondary/25">
-                        <img
-                          src={restaurant.image}
-                          alt={restaurant.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-grow">
-                        <h3 className="font-bold mb-1 text-foreground text-sm md:text-base">{restaurant.name}</h3>
-                        <div className="flex items-center justify-between">
-                          <Badge variant="outline" className="text-[10px] uppercase tracking-wider border-secondary/30 text-secondary">{restaurant.cuisine}</Badge>
-                          <div className="flex items-center gap-1 text-sm bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
-                            <Star className="w-3 h-3 fill-sky-400 text-sky-400" />
-                            <span className="font-semibold text-foreground">{restaurant.rating}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </button>
+                      restaurant={restaurant}
+                      onClick={handleCardClick}
+                    />
                   ))}
                 </div>
               </section>

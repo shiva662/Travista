@@ -40,6 +40,13 @@ export interface Food {
   description: string;
   type: 'veg' | 'non-veg';
   category?: string;
+  locationTag?: string;
+}
+
+export interface CombinedDestinationContent {
+  premiumStays?: Hotel[];
+  restaurants: Restaurant[];
+  culinaryDelights: Food[];
 }
 
 export interface DiaryPost {
@@ -853,6 +860,205 @@ export const trips: Trip[] = [
   }
 ];
 
+export const combinedDestinationContentByKey: Record<string, CombinedDestinationContent> = {
+  'varanasi-prayagraj': {
+    premiumStays: [
+      {
+        id: 'h8-v-1',
+        name: 'Taj Ganges',
+        image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYWtlJTIwcGFsYWNlJTIwaG90ZWx8ZW58MXx8fHwxNzc1ODUxODkzfDA&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Varanasi',
+        rating: 4.6,
+        type: 'Luxury Heritage'
+      },
+      {
+        id: 'h8-v-2',
+        name: 'BrijRama Palace',
+        image: 'https://images.unsplash.com/photo-1720070143795-52e5f5ed7eaf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZXJpdGFnZSUyMGhvdGVsJTIwaW5kaWF8ZW58MXx8fHwxNzcxODcyODM1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Varanasi',
+        rating: 4.7,
+        type: 'Heritage Riverside'
+      },
+      {
+        id: 'h8-v-3',
+        name: 'Radisson Hotel Varanasi',
+        image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGxvYmJ5fGVufDF8fHx8MTc3NTg3MjAwMHww&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Varanasi',
+        rating: 4.4,
+        type: 'Luxury Stay'
+      },
+      {
+        id: 'h8-p-1',
+        name: 'The Legend Hotel',
+        image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3RlbCUyMHJvb20lMjBsdXh1cnl8ZW58MXx8fHwxNzc1ODUxNzQ3fDA&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Prayagraj',
+        rating: 4.3,
+        type: 'Boutique Luxury'
+      },
+      {
+        id: 'h8-p-2',
+        name: 'Grand Continental Hotel',
+        image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjBob3RlbHxlbnwxfHx8fDE3NzU4NTE5MDN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Prayagraj',
+        rating: 4.2,
+        type: 'City Stay'
+      },
+      {
+        id: 'h8-p-3',
+        name: 'Hotel Kanha Shyam',
+        image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3V0aXF1ZSUyMHBhbGFjZSUyMGhvdGVsfGVufDF8fHx8MTc3NTg1MTkwOXww&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Prayagraj',
+        rating: 4.3,
+        type: 'Premium Stay'
+      }
+    ],
+    restaurants: [
+      {
+        id: 'r8-v-1',
+        name: 'Kashi Chat Bhandar',
+        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBzdHJlZXQlMjBmb29kfGVufDF8fHx8MTc3NTg2MzA1Nnww&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Varanasi',
+        rating: 4.4,
+        cuisine: 'Street Food'
+      },
+      {
+        id: 'r8-v-2',
+        name: 'Brown Bread Bakery',
+        image: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWZlJTIwYmFrZXJ5fGVufDF8fHx8MTc3NTg2MzA3MHww&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Varanasi',
+        rating: 4.5,
+        cuisine: 'Cafe & Bakery'
+      },
+      {
+        id: 'r8-v-3',
+        name: 'Baati Chokha Restaurant',
+        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxub3J0aCUyMGluZGlhbiUyMHJlc3RhdXJhbnR8ZW58MXx8fHwxNzc1ODYzMDgyfDA&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Varanasi',
+        rating: 4.3,
+        cuisine: 'Traditional North Indian'
+      },
+      {
+        id: 'r8-v-4',
+        name: 'Vegan & Raw Restaurant',
+        image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2ZWdhbiUyMGN1aXNpbmV8ZW58MXx8fHwxNzc1ODYzMDk0fDA&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Varanasi',
+        rating: 4.6,
+        cuisine: 'Healthy / Vegan'
+      },
+      {
+        id: 'r8-p-1',
+        name: 'El Chico Restaurant',
+        image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdWx0aS1jdWlzaW5lJTIwZGluaW5nfGVufDF8fHx8MTc3NTg2MzEwNnww&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Prayagraj',
+        rating: 4.4,
+        cuisine: 'Multi-cuisine'
+      },
+      {
+        id: 'r8-p-2',
+        name: 'Indian Coffee House',
+        image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb2ZmZWUlMjBob3VzZXxlbnwxfHx8fDE3NzU4NjMxMjB8MA&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Prayagraj',
+        rating: 4.2,
+        cuisine: 'Cafe'
+      },
+      {
+        id: 'r8-p-3',
+        name: 'Netram Mulchand & Sons',
+        image: 'https://images.unsplash.com/photo-1613292443284-8d10ef9383fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzd2VldHMlMjBhbmQlMjBzbmFja3N8ZW58MXx8fHwxNzc1ODYzMTMzfDA&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Prayagraj',
+        rating: 4.5,
+        cuisine: 'Sweets & Snacks'
+      },
+      {
+        id: 'r8-p-4',
+        name: 'Eden by Connoisseur',
+        image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaW5lJTIwZGluaW5nfGVufDF8fHx8MTc3NTg2MzE0Nnww&ixlib=rb-4.1.0&q=80&w=1080',
+        location: 'Prayagraj',
+        rating: 4.3,
+        cuisine: 'Fine Dining'
+      }
+    ],
+    culinaryDelights: [
+      {
+        id: 'f8-v-1',
+        name: 'Banarasi Paan',
+        image: 'https://mrmukhwas.in/wp-content/uploads/2024/12/product-jpeg-500x500-1.png',
+        description: 'A fragrant leaf-wrapped mouth freshener and cultural specialty from Varanasi lanes.',
+        type: 'veg',
+        category: 'Veg',
+        locationTag: 'Varanasi'
+      },
+      {
+        id: 'f8-v-2',
+        name: 'Kachori Sabzi',
+        image: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxrYWNob3JpfGVufDF8fHx8MTc3NTg2MzE3NXww&ixlib=rb-4.1.0&q=80&w=1080',
+        description: 'Crispy kachori served with spiced potato curry, a beloved breakfast choice.',
+        type: 'veg',
+        category: 'Veg',
+        locationTag: 'Varanasi'
+      },
+      {
+        id: 'f8-v-3',
+        name: 'Tamatar Chaat',
+        image: 'https://www.bigbasket.com/media/uploads/recipe/w-l/4512_2_1.jpg',
+        description: 'Tangy tomato-based street chaat topped with spices, sev, and crunchy textures.',
+        type: 'veg',
+        category: 'Veg',
+        locationTag: 'Varanasi'
+      },
+      {
+        id: 'f8-v-4',
+        name: 'Malaiyyo',
+        image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBkZXNzZXJ0fGVufDF8fHx8MTc3NTg2MzIwOHww&ixlib=rb-4.1.0&q=80&w=1080',
+        description: 'A delicate saffron-infused winter dessert with airy milk froth and nuts.',
+        type: 'veg',
+        category: 'Dessert',
+        locationTag: 'Varanasi'
+      },
+      {
+        id: 'f8-p-1',
+        name: 'Bedai & Aloo Sabzi',
+        image: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiaW5kaWFuJTIwYnJlYWtmYXN0JTIwdGhhbGl8ZW58MXx8fHwxNzc1ODYzMjIyfDA&ixlib=rb-4.1.0&q=80&w=1080',
+        description: 'Fluffy fried bread paired with flavorful potato curry, a classic breakfast plate.',
+        type: 'veg',
+        category: 'Veg',
+        locationTag: 'Prayagraj'
+      },
+      {
+        id: 'f8-p-2',
+        name: 'Jalebi',
+        image: 'https://images.unsplash.com/photo-1613292443284-8d10ef9383fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxqYWxlYml8ZW58MXx8fHwxNzc1ODYzMjQwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+        description: 'Golden syrup-soaked spirals served warm and crisp, a timeless Indian sweet.',
+        type: 'veg',
+        category: 'Dessert',
+        locationTag: 'Prayagraj'
+      },
+      {
+        id: 'f8-p-3',
+        name: 'Samosa',
+        image: 'https://static.toiimg.com/thumb/61050397.cms?imgsize=246859&width=800&height=800',
+        description: 'Crispy pastry triangles filled with spiced potatoes and served with chutneys.',
+        type: 'veg',
+        category: 'Snack',
+        locationTag: 'Prayagraj'
+      },
+      {
+        id: 'f8-p-4',
+        name: 'Rabri',
+        image: 'https://www.indianhealthyrecipes.com/wp-content/uploads/2020/10/rabri-rabdi.jpg',
+        description: 'Thickened sweetened milk dessert flavored with cardamom and topped with nuts.',
+        type: 'veg',
+        category: 'Dessert',
+        locationTag: 'Prayagraj'
+      }
+    ]
+  }
+};
+
+export const tripCombinedDestinationMap: Record<string, string> = {
+  '8': 'varanasi-prayagraj'
+};
+
 export const hotels: { [tripId: string]: Hotel[] } = {
   '1': [
     {
@@ -982,6 +1188,234 @@ export const hotels: { [tripId: string]: Hotel[] } = {
       location: 'Kerala, India',
       rating: 4.5,
       type: 'Eco Resort'
+    }
+  ],
+  '6': [
+    {
+      id: 'h6-1',
+      name: 'The Oberoi Cecil (Shimla)',
+      image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGhpbWFjaGFsfGVufDF8fHx8MTc3NTg1Nzk0MHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Shimla, Himachal Pradesh',
+      rating: 4.7,
+      type: 'Luxury Heritage'
+    },
+    {
+      id: 'h6-2',
+      name: 'Span Resort & Spa (Manali)',
+      image: 'https://images.unsplash.com/photo-1596436889106-be35e843f974?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyaXZlcmZyb250JTIwcmVzb3J0fGVufDF8fHx8MTc3NTg1Nzk0OHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Manali, Himachal Pradesh',
+      rating: 4.6,
+      type: 'Riverfront Resort'
+    },
+    {
+      id: 'h6-3',
+      name: 'Snow Valley Resorts (Manali)',
+      image: 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMHJlc29ydHxlbnwxfHx8fDE3NzU4NTc5NTV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Manali, Himachal Pradesh',
+      rating: 4.4,
+      type: 'Mountain View'
+    }
+  ],
+  '7': [
+    {
+      id: 'h7-1',
+      name: 'Taj Exotica Resort & Spa',
+      image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBiZWFjaCUyMHJlc29ydHxlbnwxfHx8fDE3NzU4NTg0Nzl8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Goa, India',
+      rating: 4.7,
+      type: 'Luxury Beach Resort'
+    },
+    {
+      id: 'h7-2',
+      name: 'W Goa',
+      image: 'https://images.unsplash.com/photo-1563911302283-d2bc129e7570?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGJlYWNofGVufDF8fHx8MTc3NTg1ODQ5Mnww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Goa, India',
+      rating: 4.6,
+      type: 'Luxury Lifestyle'
+    },
+    {
+      id: 'h7-3',
+      name: 'Zuri White Sands',
+      image: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/309284975.jpg?k=db9f18915337dbe32061796ef225edfd1172d659a4187aa93892086fe19e02e9&o=',
+      location: 'Goa, India',
+      rating: 4.5,
+      type: 'Beach Resort'
+    }
+  ],
+  '9': [
+    {
+      id: 'h9-1',
+      name: 'Taj Lake Palace',
+      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYWtlJTIwcGFsYWNlJTIwaG90ZWx8ZW58MXx8fHwxNzc1ODUxODkzfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Udaipur, Rajasthan',
+      rating: 4.8,
+      type: 'Luxury Lake View'
+    },
+    {
+      id: 'h9-2',
+      name: 'The Oberoi Udaivilas',
+      image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjBob3RlbHxlbnwxfHx8fDE3NzU4NTE5MDN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Udaipur, Rajasthan',
+      rating: 4.9,
+      type: 'Ultra Luxury Heritage'
+    },
+    {
+      id: 'h9-3',
+      name: 'Rambagh Palace',
+      image: 'https://images.unsplash.com/photo-1720070143795-52e5f5ed7eaf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZXJpdGFnZSUyMGhvdGVsJTIwaW5kaWF8ZW58MXx8fHwxNzcxODcyODM1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Jaipur, Rajasthan',
+      rating: 4.7,
+      type: 'Royal Heritage'
+    },
+    {
+      id: 'h9-4',
+      name: 'Umaid Bhawan Palace',
+      image: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyb29mdG9wJTIwaGVyaXRhZ2UlMjByZXN0YXVyYW50fGVufDF8fHx8MTc3NTg2MzgyMnww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Jodhpur, Rajasthan',
+      rating: 4.8,
+      type: 'Palace Luxury'
+    }
+  ],
+  '10': [
+    {
+      id: 'h10-1',
+      name: 'Radisson Blu Hotel',
+      image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGxvYmJ5fGVufDF8fHx8MTc3NTg2OTAwMHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Guwahati',
+      rating: 4.5,
+      type: 'Luxury City Stay'
+    },
+    {
+      id: 'h10-2',
+      name: 'Ri Kynjai Resort',
+      image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYWtlJTIwcmVzb3J0fGVufDF8fHx8MTc3NTg2OTAwOHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Shillong',
+      rating: 4.6,
+      type: 'Lake View Resort'
+    },
+    {
+      id: 'h10-3',
+      name: 'Jiva Resort',
+      image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxuYXR1cmUlMjByZXRyZWF0JTIwaG90ZWx8ZW58MXx8fHwxNzc1ODY5MDE1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Cherrapunji',
+      rating: 4.5,
+      type: 'Nature Retreat'
+    },
+    {
+      id: 'h10-4',
+      name: 'Polo Orchid Resort',
+      image: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoaWxsdG9wJTIwcmVzb3J0fGVufDF8fHx8MTc3NTg2OTAyM3ww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Cherrapunji',
+      rating: 4.4,
+      type: 'Hilltop Resort'
+    },
+    {
+      id: 'h10-5',
+      name: 'Iora - The Retreat',
+      image: 'https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3aWxkbGlmZSUyMHJlc29ydHxlbnwxfHx8fDE3NzU4NjkwMzF8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Kaziranga',
+      rating: 4.6,
+      type: 'Wildlife Resort'
+    }
+  ],
+  '11': [
+    {
+      id: 'h11-1',
+      name: 'The Lalit Grand Palace',
+      image: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBtb3VudGFpbiUyMGhvdGVsfGVufDF8fHx8MTc3NTg3MDAwMHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Srinagar',
+      rating: 4.6,
+      type: 'Luxury Heritage'
+    },
+    {
+      id: 'h11-2',
+      name: 'Khyber Himalayan Resort',
+      image: 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaWxnYXJnJTIwcmVzb3J0fGVufDF8fHx8MTc3NTg3MDAwNnww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Gulmarg',
+      rating: 4.7,
+      type: 'Mountain Luxury'
+    },
+    {
+      id: 'h11-3',
+      name: 'Vivanta Dal View',
+      image: 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYWwlMjBsYWtlJTIwaG90ZWx8ZW58MXx8fHwxNzc1ODcwMDE0fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Srinagar',
+      rating: 4.5,
+      type: 'Lake View Luxury'
+    },
+    {
+      id: 'h11-4',
+      name: 'WelcomHotel Pine N Peak',
+      image: 'https://images.unsplash.com/photo-1519817650390-64a93db51149?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoaWxsJTIwcmVzb3J0fGVufDF8fHx8MTc3NTg3MDAyMXww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Pahalgam',
+      rating: 4.6,
+      type: 'Hill Resort'
+    },
+    {
+      id: 'h11-5',
+      name: "Butt's Clermont Houseboats",
+      image: 'https://images.unsplash.com/photo-1470246973918-29a93221c455?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3VzZWJvYXQlMjBraGFzaG1pcnx8ZW58MXx8fHwxNzc1ODcwMDI5fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Srinagar',
+      rating: 4.4,
+      type: 'Houseboat Stay'
+    }
+  ],
+  '12': [
+    {
+      id: 'h12-1',
+      name: 'The Imperial',
+      image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGxvYmJ5fGVufDF8fHx8MTc3NTg3MjAwMHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Delhi',
+      rating: 4.7,
+      type: 'Luxury Heritage'
+    },
+    {
+      id: 'h12-2',
+      name: 'The Leela Palace',
+      image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwYWxhY2UlMjBob3RlbCUyMGluZGlhfGVufDF8fHx8MTc3NTg3MjAwOXww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Delhi',
+      rating: 4.8,
+      type: 'Ultra Luxury'
+    },
+    {
+      id: 'h12-3',
+      name: 'ITC Mughal',
+      image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBoZXJpdGFnZSUyMGhvdGVsfGVufDF8fHx8MTc3NTg3MjAxNnww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Agra',
+      rating: 4.6,
+      type: 'Luxury Heritage'
+    },
+    {
+      id: 'h12-4',
+      name: 'Trident Hotel',
+      image: 'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMHBvb2x8ZW58MXx8fHwxNzc1ODcyMDI0fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Agra',
+      rating: 4.5,
+      type: 'Luxury Stay'
+    },
+    {
+      id: 'h12-5',
+      name: 'Rambagh Palace',
+      image: 'https://images.unsplash.com/photo-1720070143795-52e5f5ed7eaf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZXJpdGFnZSUyMGhvdGVsJTIwaW5kaWF8ZW58MXx8fHwxNzcxODcyODM1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Jaipur',
+      rating: 4.7,
+      type: 'Royal Palace'
+    },
+    {
+      id: 'h12-6',
+      name: 'Samode Haveli',
+      image: 'https://images.unsplash.com/photo-1720070143795-52e5f5ed7eaf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZXJpdGFnZSUyMGhhdmVsaXxlbnwxfHx8fDE3NzU4NzIwMzJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Jaipur',
+      rating: 4.6,
+      type: 'Boutique Heritage'
+    },
+    {
+      id: 'h12-7',
+      name: 'The Westin Pushkar Resort & Spa',
+      image: 'https://assets.cntraveller.in/photos/60ba0938e1b212c19a81732b/16:9/w_1920,h_1080,c_limit/westin-pushkar-lead.jpg',
+      location: 'Pushkar',
+      rating: 4.5,
+      type: 'Resort Luxury'
     }
   ]
 };
@@ -1148,6 +1582,250 @@ export const restaurants: { [tripId: string]: Restaurant[] } = {
       rating: 4.6,
       cuisine: 'Famous Kerala Cuisine'
     }
+  ],
+  '6': [
+    {
+      id: 'r6-1',
+      name: "Johnson's Cafe (Manali)",
+      image: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWZlJTIwY29udGluZW50YWx8ZW58MXx8fHwxNzc1ODU3OTYyfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Manali, Himachal Pradesh',
+      rating: 4.5,
+      cuisine: 'Cafe & Continental'
+    },
+    {
+      id: 'r6-2',
+      name: 'Cafe 1947 (Manali)',
+      image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyaXZlcnNpZGUlMjBjYWZlfGVufDF8fHx8MTc3NTg1Nzk3MHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Manali, Himachal Pradesh',
+      rating: 4.6,
+      cuisine: 'Riverside Cafe'
+    },
+    {
+      id: 'r6-3',
+      name: 'Wake & Bake Cafe (Shimla)',
+      image: 'https://images.unsplash.com/photo-1445116572660-236099ec97a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWZlJTIwYnJlYWtmYXN0fGVufDF8fHx8MTc3NTg1Nzk3OHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Shimla, Himachal Pradesh',
+      rating: 4.4,
+      cuisine: 'Cafe & Breakfast'
+    },
+    {
+      id: 'r6-4',
+      name: 'Il Forno (Shimla)',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpdGFsaWFuJTIwZmluZSUyMGRpbmluZ3xlbnwxfHx8fDE3NzU4NTc5ODV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Shimla, Himachal Pradesh',
+      rating: 4.5,
+      cuisine: 'Italian & Fine Dining'
+    }
+  ],
+  '7': [
+    {
+      id: 'r7-1',
+      name: 'Thalassa',
+      image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdW5zZXQlMjByZXN0YXVyYW50JTIwYmVhY2h8ZW58MXx8fHwxNzc1ODU4NTExfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Goa, India',
+      rating: 4.5,
+      cuisine: 'Greek & Sunset View'
+    },
+    {
+      id: 'r7-2',
+      name: "Fisherman's Wharf",
+      image: 'https://images.unsplash.com/photo-1559847844-d721426d6edc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZWFmb29kJTIwZGluaW5nfGVufDF8fHx8MTc3NTg1ODUyMHww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Goa, India',
+      rating: 4.4,
+      cuisine: 'Seafood'
+    },
+    {
+      id: 'r7-3',
+      name: 'Vinayak Family Restaurant',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnb2FuJTIwZm9vZCUyMHJlc3RhdXJhbnR8ZW58MXx8fHwxNzc1ODU4NTI4fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Goa, India',
+      rating: 4.3,
+      cuisine: 'Goan Local Food'
+    },
+    {
+      id: 'r7-4',
+      name: 'Pousada by the Beach',
+      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiZWFjaHNpZGUlMjBkaW5pbmd8ZW58MXx8fHwxNzc1ODU4NTM1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Goa, India',
+      rating: 4.6,
+      cuisine: 'Beachside Dining'
+    }
+  ],
+  '9': [
+    {
+      id: 'r9-1',
+      name: 'Chokhi Dhani (Jaipur)',
+      image: 'https://images.unsplash.com/photo-1613292443284-8d10ef9383fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYWphc3RoYW5pJTIwZm9vZHxlbnwxfHx8fDE3NzU4NjM3ODZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Jaipur',
+      rating: 4.5,
+      cuisine: 'Traditional Rajasthani'
+    },
+    {
+      id: 'r9-2',
+      name: '1135 AD Restaurant (Jaipur)',
+      image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyb3lhbCUyMGZpbmUlMjBkaW5pbmd8ZW58MXx8fHwxNzc1ODYzNzk4fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Jaipur',
+      rating: 4.6,
+      cuisine: 'Royal Fine Dining'
+    },
+    {
+      id: 'r9-3',
+      name: 'Ambrai Restaurant (Udaipur)',
+      image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYWtlJTIwdmlldyUyMGRpbmluZ3xlbnwxfHx8fDE3NzU4NjM4MTB8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Udaipur',
+      rating: 4.6,
+      cuisine: 'Lake View Dining'
+    },
+    {
+      id: 'r9-4',
+      name: 'Indique Restaurant (Jodhpur)',
+      image: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyb29mdG9wJTIwaGVyaXRhZ2UlMjByZXN0YXVyYW50fGVufDF8fHx8MTc3NTg2MzgyMnww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Jodhpur',
+      rating: 4.4,
+      cuisine: 'Rooftop & Heritage View'
+    }
+  ],
+  '10': [
+    {
+      id: 'r10-1',
+      name: 'Paradise Restaurant',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhc3NhbWVzZSUyMHJlc3RhdXJhbnR8ZW58MXx8fHwxNzc1ODY5MDQwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Guwahati',
+      rating: 4.5,
+      cuisine: 'Assamese Cuisine'
+    },
+    {
+      id: 'r10-2',
+      name: 'Khorikaa',
+      image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cmFkaXRpb25hbCUyMGluZGlhbiUyMHJlc3RhdXJhbnR8ZW58MXx8fHwxNzc1ODY5MDQ3fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Guwahati',
+      rating: 4.4,
+      cuisine: 'Traditional Assamese'
+    },
+    {
+      id: 'r10-3',
+      name: 'Cafe Shillong',
+      image: 'https://images.unsplash.com/photo-1445116572660-236099ec97a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWZlJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzc1ODY5MDUzfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Shillong',
+      rating: 4.6,
+      cuisine: 'Cafe & Continental'
+    },
+    {
+      id: 'r10-4',
+      name: "Dylan's Cafe",
+      image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdXNpYyUyMGNhZmV8ZW58MXx8fHwxNzc1ODY5MDYzfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Shillong',
+      rating: 4.5,
+      cuisine: 'Music Cafe'
+    },
+    {
+      id: 'r10-5',
+      name: 'Orange Roots',
+      image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwcmVzdGF1cmFudHxlbnwxfHx8fDE3NzU4NjkwNzB8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Shillong',
+      rating: 4.4,
+      cuisine: 'Organic & Local Food'
+    }
+  ],
+  '11': [
+    {
+      id: 'r11-1',
+      name: 'Mughal Darbar',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxrbGFzaG1pcmklMjByZXN0YXVyYW50fGVufDF8fHx8MTc3NTg3MDAzNnww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Srinagar',
+      rating: 4.5,
+      cuisine: 'Kashmiri Cuisine'
+    },
+    {
+      id: 'r11-2',
+      name: 'Ahdoos Restaurant',
+      image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cmFkaXRpb25hbCUyMGRpbmluZ3xlbnwxfHx8fDE3NzU4NzAwNDN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Srinagar',
+      rating: 4.4,
+      cuisine: 'Traditional Kashmiri'
+    },
+    {
+      id: 'r11-3',
+      name: 'Stream Restaurant',
+      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdWx0aS1jdWlzaW5lJTIwcmVzdGF1cmFudHxlbnwxfHx8fDE3NzU4NzAwNTB8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Srinagar',
+      rating: 4.3,
+      cuisine: 'Multi-cuisine'
+    },
+    {
+      id: 'r11-4',
+      name: 'Bakshi Restaurant',
+      image: 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsb2NhbCUyMGRpbmluZ3xlbnwxfHx8fDE3NzU4NzAwNTd8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Pahalgam',
+      rating: 4.2,
+      cuisine: 'Local Dining'
+    },
+    {
+      id: 'r11-5',
+      name: 'Hotel Highlands Restaurant',
+      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMHZpZXclMjByZXN0YXVyYW50fGVufDF8fHx8MTc3NTg3MDA2NXww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Gulmarg',
+      rating: 4.3,
+      cuisine: 'Mountain View Dining'
+    }
+  ],
+  '12': [
+    {
+      id: 'r12-1',
+      name: "Karim's",
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdWdobGFpJTIwcmVzdGF1cmFudHxlbnwxfHx8fDE3NzU4NzIwNDh8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Delhi',
+      rating: 4.4,
+      cuisine: 'Mughlai'
+    },
+    {
+      id: 'r12-2',
+      name: 'Indian Accent',
+      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaW5lJTIwZGluaW5nJTIwcmVzdGF1cmFudHxlbnwxfHx8fDE3NzU4NzIwNTd8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Delhi',
+      rating: 4.7,
+      cuisine: 'Fine Dining'
+    },
+    {
+      id: 'r12-3',
+      name: 'Pinch of Spice',
+      image: 'https://images.unsplash.com/photo-1559847844-d721426d6edc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxub3J0aCUyMGluZGlhbiUyMGRpbmluZ3xlbnwxfHx8fDE3NzU4NzIwNjV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Agra',
+      rating: 4.5,
+      cuisine: 'North Indian'
+    },
+    {
+      id: 'r12-4',
+      name: 'Esphahan - ITC Mughal',
+      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhZ3JhJTIwZmluZSUyMGRpbmluZ3xlbnwxfHx8fDE3NzU4NzIwNzN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Agra',
+      rating: 4.6,
+      cuisine: 'Fine Dining'
+    },
+    {
+      id: 'r12-5',
+      name: 'Chokhi Dhani',
+      image: 'https://images.unsplash.com/photo-1613292443284-8d10ef9383fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYWphc3RoYW5pJTIwZm9vZHxlbnwxfHx8fDE3NzU4NjM3ODZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Jaipur',
+      rating: 4.5,
+      cuisine: 'Traditional Rajasthani'
+    },
+    {
+      id: 'r12-6',
+      name: 'Handi Restaurant',
+      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsb2NhbCUyMGN1aXNpbmUlMjByZXN0YXVyYW50fGVufDF8fHx8MTc3NTg3MjA4MXww&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Jaipur',
+      rating: 4.4,
+      cuisine: 'Local Cuisine'
+    },
+    {
+      id: 'r12-7',
+      name: 'Out of the Blue',
+      image: 'https://images.unsplash.com/photo-1445116572660-236099ec97a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYWZlJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzc1ODY5MDUzfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      location: 'Pushkar',
+      rating: 4.3,
+      cuisine: 'Cafe & International'
+    }
   ]
 };
 
@@ -1308,6 +1986,258 @@ export const traditionalFoods: { [tripId: string]: Food[] } = {
       description: 'Pearl spot fish marinated in spices, wrapped in banana leaf, and pan-roasted to perfection.',
       type: 'non-veg',
       category: 'Fish'
+    }
+  ],
+  '6': [
+    {
+      id: 'f6-1',
+      name: 'Siddu',
+      image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cmFkaXRpb25hbCUyMGJyZWFkfGVufDF8fHx8MTc3NTg1Nzk5Mnww&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Steamed Himachali wheat bread stuffed with savory filling and served with ghee.',
+      type: 'veg',
+      category: 'Traditional Bread'
+    },
+    {
+      id: 'f6-2',
+      name: 'Madra',
+      image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGlja3BlYSUyMGN1cnJ5fGVufDF8fHx8MTc3NTg1ODAwMHww&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'A rich chickpea curry cooked in yogurt and whole spices, central to Himachali feasts.',
+      type: 'veg',
+      category: 'Chickpea Curry'
+    },
+    {
+      id: 'f6-3',
+      name: 'Dham',
+      image: 'https://images.unsplash.com/photo-1764699486769-fc9a8b03130a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmZXN0aXZlJTIwbWVhbCUyMHRoYWxpfGVufDF8fHx8MTc3NTg1ODAwN3ww&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'A traditional festive meal featuring rice, lentils, rajma, and local curries.',
+      type: 'veg',
+      category: 'Festive Meal'
+    },
+    {
+      id: 'f6-4',
+      name: 'Trout Fish',
+      image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cm91dCUyMGZpc2h8ZW58MXx8fHwxNzc1ODU4MDE1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Fresh Himalayan trout pan-fried or grilled with herbs and mountain spices.',
+      type: 'non-veg',
+      category: 'Non-Veg'
+    }
+  ],
+  '7': [
+    {
+      id: 'f7-1',
+      name: 'Goan Fish Curry',
+      image: 'https://images.unsplash.com/photo-1631452180539-96aca7d48617?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaXNoJTIwY3Vycnl8ZW58MXx8fHwxNzc1ODU4NTQ3fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Tangy coconut-based fish curry with kokum and coastal spices, a Goa staple.',
+      type: 'non-veg',
+      category: 'Seafood'
+    },
+    {
+      id: 'f7-2',
+      name: 'Prawn Balchao',
+      image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcmF3biUyMGN1cnJ5fGVufDF8fHx8MTc3NTg1ODU1OHww&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Spicy and tangy prawn pickle-style curry packed with Goan vinegar and chilies.',
+      type: 'non-veg',
+      category: 'Seafood'
+    },
+    {
+      id: 'f7-3',
+      name: 'Bebinca',
+      image: 'https://images.unsplash.com/photo-1612203985729-70726954388c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkZXNzZXJ0JTIwc2xpY2V8ZW58MXx8fHwxNzc1ODU4NTY4fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Goa\'s iconic layered coconut milk dessert, slow-baked to caramelized perfection.',
+      type: 'veg',
+      category: 'Dessert'
+    },
+    {
+      id: 'f7-4',
+      name: 'Pork Vindaloo',
+      image: 'https://assets.cntraveller.in/photos/60ba2039a1a415b43b10bfc8/1:1/w_768,h_768,c_limit/Goan-vindaloo-1366x768.jpg',
+      description: 'Fiery pork curry marinated in vinegar, garlic, and spices with Portuguese influence.',
+      type: 'non-veg',
+      category: 'Non-Veg'
+    }
+  ],
+  '9': [
+    {
+      id: 'f9-1',
+      name: 'Dal Baati Churma',
+      image: 'https://images.unsplash.com/photo-1764699486769-fc9a8b03130a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB0aGFsaXxlbnwxfHx8fDE3NzU4NjM4MzV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Traditional Rajasthani meal with baked wheat balls and lentils.',
+      type: 'veg',
+      category: 'Veg'
+    },
+    {
+      id: 'f9-2',
+      name: 'Gatte ki Sabzi',
+      image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBjdXJyeSUyMHZlZ3xlbnwxfHx8fDE3NzU4NjM4NDV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Gram flour dumplings in spicy curry.',
+      type: 'veg',
+      category: 'Veg'
+    },
+    {
+      id: 'f9-3',
+      name: 'Laal Maas',
+      image: 'https://images.unsplash.com/photo-1764314108477-f026172e32a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcGljeSUyMG11dHRvbiUyMGN1cnJ5fGVufDF8fHx8MTc3NTg2Mzg1M3ww&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Spicy mutton curry, famous in Rajasthan.',
+      type: 'non-veg',
+      category: 'Non-Veg'
+    },
+    {
+      id: 'f9-4',
+      name: 'Ghewar',
+      image: 'https://images.unsplash.com/photo-1613292443284-8d10ef9383fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyYWphc3RoYW5pJTIwZGVzc2VydHxlbnwxfHx8fDE3NzU4NjM4NjN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Sweet dish popular during festivals.',
+      type: 'veg',
+      category: 'Dessert'
+    }
+  ],
+  '10': [
+    {
+      id: 'f10-1',
+      name: 'Assamese Thali',
+      image: 'https://images.unsplash.com/photo-1764699486769-fc9a8b03130a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB0aGFsaXxlbnwxfHx8fDE3NzU4NjkwNzZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Traditional meal with rice, dal, fish or meat, and local herbs.',
+      type: 'veg',
+      category: 'Veg/Non-Veg',
+      locationTag: 'Guwahati'
+    },
+    {
+      id: 'f10-2',
+      name: 'Khar',
+      image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2ZWclMjBjdXJyeXxlbnwxfHx8fDE3NzU4NjkwODR8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Unique Assamese dish made with raw papaya and alkaline extract.',
+      type: 'veg',
+      category: 'Veg',
+      locationTag: 'Guwahati'
+    },
+    {
+      id: 'f10-3',
+      name: 'Jadoh',
+      image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaWF0JTIwcmljZSUyMGRpc2h8ZW58MXx8fHwxNzc1ODY5MDkxfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Khasi rice dish cooked with meat and spices.',
+      type: 'non-veg',
+      category: 'Non-Veg',
+      locationTag: 'Shillong'
+    },
+    {
+      id: 'f10-4',
+      name: 'Tungrymbai',
+      image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb3liZWFuJTIwZGlzaHxlbnwxfHx8fDE3NzU4NjkwOTd8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Fermented soybean dish, rich in flavor.',
+      type: 'veg',
+      category: 'Veg',
+      locationTag: 'Shillong'
+    },
+    {
+      id: 'f10-5',
+      name: 'Smoked Pork',
+      image: 'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbW9rZWQlMjBtZWF0JTIwZGlzaHxlbnwxfHx8fDE3NzU4NjkxMDN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Pork cooked with bamboo shoots and spices.',
+      type: 'non-veg',
+      category: 'Non-Veg',
+      locationTag: 'Northeast'
+    }
+  ],
+  '11': [
+    {
+      id: 'f11-1',
+      name: 'Rogan Josh',
+      image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdXR0b24lMjBjdXJyeXxlbnwxfHx8fDE3NzU4NzAwNzN8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Traditional Kashmiri lamb curry with rich spices.',
+      type: 'non-veg',
+      category: 'Non-Veg',
+      locationTag: 'Srinagar'
+    },
+    {
+      id: 'f11-2',
+      name: 'Yakhni',
+      image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b2d1cnQlMjBjdXJyeXxlbnwxfHx8fDE3NzU4NzAwNzl8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Yogurt-based mutton curry, mild and aromatic.',
+      type: 'non-veg',
+      category: 'Non-Veg',
+      locationTag: 'Srinagar'
+    },
+    {
+      id: 'f11-3',
+      name: 'Dum Aloo (Kashmiri Style)',
+      image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkdW0lMjBhbG9vfGVufDF8fHx8MTc3NTg3MDA4NXww&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Baby potatoes cooked in spicy gravy.',
+      type: 'veg',
+      category: 'Veg',
+      locationTag: 'Pahalgam'
+    },
+    {
+      id: 'f11-4',
+      name: 'Kahwa',
+      image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxncmVlbiUyMHRlYXxlbnwxfHx8fDE3NzU4NzAwOTJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Traditional green tea with saffron, almonds, and spices.',
+      type: 'veg',
+      category: 'Beverage',
+      locationTag: 'Gulmarg'
+    }
+  ],
+  '12': [
+    {
+      id: 'f12-1',
+      name: 'Butter Chicken',
+      image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXR0ZXIlMjBjaGlja2VufGVufDF8fHx8MTc3NTg3MjA4OHww&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Creamy tomato-based chicken curry.',
+      type: 'non-veg',
+      category: 'Non-Veg',
+      locationTag: 'Delhi'
+    },
+    {
+      id: 'f12-2',
+      name: 'Chole Bhature',
+      image: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiSLB7zfxFCFag7Pt9CHnH3wk61PILgDo5CCTxT01YjSmEKOVY6uskLp8qEnLi8sIsAAMBOWo4AGXHUavOeuWowkrR4u4QtSlryJKCwcR837ajLT906ZOcBhwQuomU453tC8azJe5SikPUleEkJhz-FmTQKa8frlxB7tir-_0V97PqF89QHvQfh5iNH/s1080/IMG_20220904_210330.jpg',
+      description: 'Spicy chickpeas with deep-fried bread.',
+      type: 'veg',
+      category: 'Veg',
+      locationTag: 'Delhi'
+    },
+    {
+      id: 'f12-3',
+      name: 'Petha',
+      image: 'https://thecentrum.in/wp-content/uploads/2025/04/Agras-Petha-and-Beyond-Exploring-the-Citys-Culinary-Side-img.webp',
+      description: 'Famous sweet made from ash gourd.',
+      type: 'veg',
+      category: 'Dessert',
+      locationTag: 'Agra'
+    },
+    {
+      id: 'f12-4',
+      name: 'Bedai & Aloo Sabzi',
+      image: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiaW5kaWFuJTIwYnJlYWtmYXN0JTIwdGhhbGl8ZW58MXx8fHwxNzc1ODYzMjIyfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Spicy breakfast dish.',
+      type: 'veg',
+      category: 'Veg',
+      locationTag: 'Agra'
+    },
+    {
+      id: 'f12-5',
+      name: 'Dal Baati Churma',
+      image: 'https://images.unsplash.com/photo-1764699486769-fc9a8b03130a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjB0aGFsaXxlbnwxfHx8fDE3NzU4NjM4MzV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Traditional Rajasthani meal.',
+      type: 'veg',
+      category: 'Veg',
+      locationTag: 'Jaipur'
+    },
+    {
+      id: 'f12-6',
+      name: 'Laal Maas',
+      image: 'https://images.unsplash.com/photo-1764314108477-f026172e32a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzcGljeSUyMG11dHRvbiUyMGN1cnJ5fGVufDF8fHx8MTc3NTg2Mzg1M3ww&ixlib=rb-4.1.0&q=80&w=1080',
+      description: 'Spicy mutton curry.',
+      type: 'non-veg',
+      category: 'Non-Veg',
+      locationTag: 'Jaipur'
+    },
+    {
+      id: 'f12-7',
+      name: 'Malpua',
+      image: 'https://www.sugarfree-india.com/wp-content/uploads/2026/02/sugar-free-malpua-recipe.webp',
+      description: 'Sweet pancake soaked in syrup.',
+      type: 'veg',
+      category: 'Dessert',
+      locationTag: 'Pushkar'
     }
   ]
 };
